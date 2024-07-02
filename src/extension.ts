@@ -227,6 +227,8 @@ export function activate(context: vscode.ExtensionContext) {
           // console.log('Received a message from webview:', message);
           const panel = createDashboard(); //create dashboard panel webview when user clicks button
           let results = await compileLogic();
+          console.log(results);
+          
           let scoreData = getAccessScore(results);
           panel.webview.postMessage({ data: results, recData: scoreData });
 

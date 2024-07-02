@@ -1,7 +1,7 @@
 import { log } from 'console';
 import * as vscode from 'vscode';
 const { JSDOM } = require('jsdom');
-const { getLineNumber } = require('./getLineNumber');
+// const { getLineNumber } = require('./getLineNumber');
 
 // const { evalAnchors } = require('./aria-standards/critical/anchor-labels.js');
 // const { checkAreaMapAltText } = require('./aria-standards/critical/area-maps-alt-text.js');
@@ -18,8 +18,7 @@ const { getLineNumber } = require('./getLineNumber');
 // const { videoCaptions } = require('./aria-standards/critical/video-captions.js');
 // const { checkLabels } = require('./aria-standards/critical/form-labels.js');
 // const { checkAriaRoles } = require('./aria-standards/critical/role-support-aria-attribute.js');
-
-const { ariaObject } = require('./aria-standards/critical/aria-object.js');
+const { inputButtonText } = require('./maria-standard/allTheMarias');
 
 export interface AriaRecommendations {
   [key: string]: any;
@@ -27,37 +26,24 @@ export interface AriaRecommendations {
 
 export async function compileLogic(document: vscode.TextDocument) {
   const ariaRecommendations: AriaRecommendations = {};
-  //   const activeEditor = vscode.window.activeTextEditor;
-  //   const htmlCode = activeEditor.document.getText();
-  const activeEditor = vscode.window.activeTextEditor;
-  const htmlCode = activeEditor.document.getText();
+  const htmlCode = vscode.window.activeTextEditor.document.getText();
   const dom = new JSDOM(htmlCode, {
     url: 'http://ciafund.gov',
     pretendToBeVisual: true,
+    includeNodeLocations: true,
   });
   //   const winDocument = dom.window.document.body.innerHTML;
 
-  const ludwig = dom.window.document.body;
-  const input = ludwig.querySelectorAll('input');
+  const body = dom.window.document.body;
+  const inputs = body.querySelectorAll('input');
 
-  function inputButtonText(input: any) {
-    const inputButtonsWithoutText: any[] = [];
-    input.forEach((el: any) => {
-      inputButtonsWithoutText.push([el.outerHTML, 9999]);
-      //   const lineNumber = getLineNumber(dom.window.document, el.outerHTML);
-      //   if (el.value === '' || !el.value) {
-      //     inputButtonsWithoutText.push([el.outerHTML, lineNumber]);
-      //     // console.log(`Input Button ${index + 1} does not have a value.`);
-      //   }
-    });
-    return inputButtonsWithoutText;
-  }
+  inputButtonText(inputs, ariaRecommendations);
 
-  const inputButtonsWithoutText: any = inputButtonText(input);
+  //   const inputButtonsWithoutText: any = inputButtonText(inputs);
 
-  inputButtonsWithoutText.forEach((element: string, index: number) => {
-    ariaRecommendations[element[1]] = [ariaObject.inputButton, element[0]];
-  });
+  //   inputButtonsWithoutText.forEach((element: string) => {
+  //     ariaRecommendations[element[1]] = [ariaObject.inputButton, element[0]];
+  //   });
 
   //   // anchor-label
   //   const anchorsWithoutAriaLabel = await evalAnchors();
