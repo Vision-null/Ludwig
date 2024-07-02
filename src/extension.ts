@@ -219,29 +219,16 @@ export function activate(context: vscode.ExtensionContext) {
             `;
 
       //Handle messages or events from Sidebar webview view here
-      webviewView.webview.onDidReceiveMessage(async (message) => {
-        const activeEditor = vscode.window.activeTextEditor;
+      webviewView.webview.onDidReceiveMessage((message) => {
         //if message is sent from  sidepanel & and if the active document is html, then create a dashboard
         if (message.message === 'scanDoc') {
           //   &&  activeEditor && activeEditor.document.languageId === 'html'
-          // console.log('Received a message from webview:', message);
           const panel = createDashboard(); //create dashboard panel webview when user clicks button
-          let results = await compileLogic();
+          let results = compileLogic();
           console.log(results);
-          
+
           let scoreData = getAccessScore(results);
           panel.webview.postMessage({ data: results, recData: scoreData });
-
-          // .then((ariaRecs: { [key: string]: any }) => {
-          //   scoreData = getAccessScore(ariaRecs); //get data on accessibility score
-          //   //send aria rec and score data to Dashboard App
-
-          /* ariaRecs =
-                            {
-                                Line # w/Violation: [{desc: 'recommendation text', link: ['url',...]}, 'HTML code w/violation'],
-                                
-                            } 
-                        */
         }
       });
     }
