@@ -1,2 +1,5 @@
 /node_modules
 /build
+# /HTMLsamples
+/react-sidebar/dist/
+/react-dashboard/dist/
