@@ -1,119 +1,160 @@
+import { log } from 'console';
 import * as vscode from 'vscode';
-const { evalAnchors } = require('./aria-standards/critical/anchor-labels.js');
-const { checkAreaMapAltText } = require('./aria-standards/critical/area-maps-alt-text.js');
-const { checkAriaHidden } = require('./aria-standards/critical/aria-hidden.js');
-const { checkButtonText } = require('./aria-standards/critical/button-text.js');
-const { checkImgAltText } = require('./aria-standards/critical/img-alt-text.js');
-const { inputButtonText } = require('./aria-standards/critical/input-button.js');
-const { checkMetaHttpRefresh } = require('./aria-standards/critical/meta-http-equiv-refresh.js');
-const { checkMetaViewportTextResize } = require('./aria-standards/critical/meta-viewport-text-zoom.js');
-const { selectName } = require('./aria-standards/critical/select-name.js');
-const { checkUniqueIds } = require('./aria-standards/critical/unique-ids.js');
-const { videoCaptions } = require('./aria-standards/critical/video-captions.js');
-const { checkLabels } = require('./aria-standards/critical/form-labels.js');
-const { checkAriaRoles } = require('./aria-standards/critical/role-support-aria-attribute.js');
+const { JSDOM } = require('jsdom');
+const { getLineNumber } = require('./getLineNumber');
+
+// const { evalAnchors } = require('./aria-standards/critical/anchor-labels.js');
+// const { checkAreaMapAltText } = require('./aria-standards/critical/area-maps-alt-text.js');
+// const { checkAriaHidden } = require('./aria-standards/critical/aria-hidden.js');
+// const { checkButtonText } = require('./aria-standards/critical/button-text.js');
+// const { checkImgAltText } = require('./aria-standards/critical/img-alt-text.js');
+// const {
+//   inputButtonText,
+// } = require('./aria-standards/critical/input-button.js');
+// const { checkMetaHttpRefresh } = require('./aria-standards/critical/meta-http-equiv-refresh.js');
+// const { checkMetaViewportTextResize } = require('./aria-standards/critical/meta-viewport-text-zoom.js');
+// const { selectName } = require('./aria-standards/critical/select-name.js');
+// const { checkUniqueIds } = require('./aria-standards/critical/unique-ids.js');
+// const { videoCaptions } = require('./aria-standards/critical/video-captions.js');
+// const { checkLabels } = require('./aria-standards/critical/form-labels.js');
+// const { checkAriaRoles } = require('./aria-standards/critical/role-support-aria-attribute.js');
 
 const { ariaObject } = require('./aria-standards/critical/aria-object.js');
 
-
 export interface AriaRecommendations {
-    [key: string]: any;
+  [key: string]: any;
 }
 
-export async function compileLogic(document: vscode.TextDocument): Promise<AriaRecommendations> {
-    const ariaRecommendations: AriaRecommendations = {};
+export async function compileLogic(document: vscode.TextDocument) {
+  const ariaRecommendations: AriaRecommendations = {};
+  //   const activeEditor = vscode.window.activeTextEditor;
+  //   const htmlCode = activeEditor.document.getText();
+  const activeEditor = vscode.window.activeTextEditor;
+  const htmlCode = activeEditor.document.getText();
+  const dom = new JSDOM(htmlCode, {
+    url: 'http://ciafund.gov',
+    pretendToBeVisual: true,
+  });
+  //   const winDocument = dom.window.document.body.innerHTML;
 
-    // anchor-label
-    const anchorsWithoutAriaLabel = await evalAnchors();
+  const ludwig = dom.window.document.body;
+  const input = ludwig.querySelectorAll('input');
 
-    anchorsWithoutAriaLabel.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.anchorLabel, element[0]];
+  function inputButtonText(input: any) {
+    const inputButtonsWithoutText: any[] = [];
+    input.forEach((el: any) => {
+      inputButtonsWithoutText.push([el.outerHTML, 9999]);
+      //   const lineNumber = getLineNumber(dom.window.document, el.outerHTML);
+      //   if (el.value === '' || !el.value) {
+      //     inputButtonsWithoutText.push([el.outerHTML, lineNumber]);
+      //     // console.log(`Input Button ${index + 1} does not have a value.`);
+      //   }
     });
+    return inputButtonsWithoutText;
+  }
 
-    // area-maps-alt-text
-    const areaMapsWithoutAltText = await checkAreaMapAltText();
+  const inputButtonsWithoutText: any = inputButtonText(input);
 
-    areaMapsWithoutAltText.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.areaAltText, element[0]];
-      });
+  inputButtonsWithoutText.forEach((element: string, index: number) => {
+    ariaRecommendations[element[1]] = [ariaObject.inputButton, element[0]];
+  });
 
-    // aria-hidden
-    const hiddenAria = await checkAriaHidden();
+  //   // anchor-label
+  //   const anchorsWithoutAriaLabel = await evalAnchors();
 
-    hiddenAria.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.ariaHidden, element[0]];
-      });
+  //   anchorsWithoutAriaLabel.forEach((element: string, index: number) => {
+  //     ariaRecommendations[element[1]] = [ariaObject.anchorLabel, element[0]];
+  //   });
 
-    // button-text
-    const buttonText = await checkButtonText();
+  //   // area-maps-alt-text
+  //   const areaMapsWithoutAltText = await checkAreaMapAltText();
 
-    buttonText.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.discernibleButtonText, element[0]];
-    });
+  //   areaMapsWithoutAltText.forEach((element: string, index: number) => {
+  //     ariaRecommendations[element[1]] = [ariaObject.areaAltText, element[0]];
+  //   });
 
-    // unique-ids
-    const duplicateElements = await checkUniqueIds();
+  //   // aria-hidden
+  //   const hiddenAria = await checkAriaHidden();
 
-    duplicateElements.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.uniqueIDs, element[0]];
-      });
+  //   hiddenAria.forEach((element: string, index: number) => {
+  //     ariaRecommendations[element[1]] = [ariaObject.ariaHidden, element[0]];
+  //   });
 
-    // img alt text
-    const imgAlts = await checkImgAltText();
-    
-    imgAlts.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.imageAlts, element[0]];
-    });
+  //   // button-text
+  //   const buttonText = await checkButtonText();
 
-    // input-button
-    const inputButtonsWithoutText = await inputButtonText();
+  //   buttonText.forEach((element: string, index: number) => {
+  //     ariaRecommendations[element[1]] = [
+  //       ariaObject.discernibleButtonText,
+  //       element[0],
+  //     ];
+  //   });
 
-    inputButtonsWithoutText.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.inputButton, element[0]];
-    });
+  //   // unique-ids
+  //   const duplicateElements = await checkUniqueIds();
 
-    // meta-http-equiv-refresh
-    const metaWrongContent = await checkMetaHttpRefresh();
+  //   duplicateElements.forEach((element: string, index: number) => {
+  //     ariaRecommendations[element[1]] = [ariaObject.uniqueIDs, element[0]];
+  //   });
 
-    metaWrongContent.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.metaEquivRefresh, element[0]];
-    });
+  //   // img alt text
+  //   const imgAlts = await checkImgAltText();
 
-    // meta-viewport-text-zoom
-    const metaViewportElements = await checkMetaViewportTextResize();
+  //   imgAlts.forEach((element: string, index: number) => {
+  //     ariaRecommendations[element[1]] = [ariaObject.imageAlts, element[0]];
+  //   });
 
-    metaViewportElements.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.metaViewport, element[0]];
-      });
+  //   // meta-http-equiv-refresh
+  //   const metaWrongContent = await checkMetaHttpRefresh();
 
-    // select-name
-    const selectArray = await selectName();
+  //   metaWrongContent.forEach((element: string, index: number) => {
+  //     ariaRecommendations[element[1]] = [ariaObject.metaEquivRefresh, element[0]];
+  //   });
 
-    selectArray.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.selectHasAccessName, element[0]];
-    });
+  //   // meta-viewport-text-zoom
+  //   const metaViewportElements = await checkMetaViewportTextResize();
 
-    // video-captions
-    const videosArray = await videoCaptions();
+  //   metaViewportElements.forEach((element: string, index: number) => {
+  //     ariaRecommendations[element[1]] = [ariaObject.metaViewport, element[0]];
+  //   });
 
-    videosArray.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.videoCaptions, element[0]];
-    });
+  //   // select-name
+  //   const selectArray = await selectName();
 
-    // ARIAlogic - forms have labels
-    const formArray = await checkLabels();
+  //   selectArray.forEach((element: string, index: number) => {
+  //     ariaRecommendations[element[1]] = [
+  //       ariaObject.selectHasAccessName,
+  //       element[0],
+  //     ];
+  //   });
 
-    formArray.forEach((element: string, index: number) => {
-        ariaRecommendations[element[1]] = [ariaObject.formsHaveLabels, element[0]];
-    });
+  //   // video-captions
+  //   const videosArray = await videoCaptions();
 
-    // role-support-aria-attribute
-    const roleSupportHtml = await checkAriaRoles();
+  //   videosArray.forEach((element: string, index: number) => {
+  //     ariaRecommendations[element[1]] = [ariaObject.videoCaptions, element[0]];
+  //   });
 
-    roleSupportHtml.forEach((element: string[], index: number) => {
-        ariaRecommendations[element[2]] = [{link: element[1], desc: 'Please select "Read More" below to see documentation for this error.'}, element[0]];
-    });
+  //   // ARIAlogic - forms have labels
+  //   const formArray = await checkLabels();
 
-    // RETURN FINAL OBJECT
-    return ariaRecommendations;
+  //   formArray.forEach((element: string, index: number) => {
+  //     ariaRecommendations[element[1]] = [ariaObject.formsHaveLabels, element[0]];
+  //   });
+
+  //   // role-support-aria-attribute
+  //   const roleSupportHtml = await checkAriaRoles();
+
+  //   roleSupportHtml.forEach((element: string[], index: number) => {
+  //     ariaRecommendations[element[2]] = [
+  //       {
+  //         link: element[1],
+  //         desc: 'Please select "Read More" below to see documentation for this error.',
+  //       },
+  //       element[0],
+  //     ];
+  //   });
+
+  // RETURN FINAL OBJECT
+  return ariaRecommendations;
 }
