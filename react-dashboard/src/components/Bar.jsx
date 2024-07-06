@@ -22,7 +22,7 @@ const BarText = ({ x, y, index, datum }) => {
 function Bar({ recommendations }) {
   const data = recommendations.recData;
 
-  const colorScale = ['#3a4750', '#be3144'];
+  const colorScale = ['#28a745', '#be3144'];
   const pieSize = 400; // Size of the VictoryPie
 
   // Calculate the center coordinates
@@ -32,9 +32,13 @@ function Bar({ recommendations }) {
     return { centerX, centerY };
   }, [pieSize]);
 
-  // if (data.length === 0) {
-  //     return <h3 className='critical-small'>Score unavailable, please activate an HTML document before scanning</h3>;
-  // }
+  if (data.length === 0) {
+    return (
+      <h3 className="critical-small">
+        Score unavailable, please activate an HTML document before scanning
+      </h3>
+    );
+  }
   return (
     <div className="panelContainer" style={{ width: 350 }}>
       {/* in case lazy-loaded components are not yet available */}

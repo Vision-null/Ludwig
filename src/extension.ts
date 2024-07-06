@@ -179,18 +179,15 @@ export function activate(context: vscode.ExtensionContext) {
 
   //Primary Sidebar Webview View Provider
   class SidebarProvider {
-    //Call when view first becomes visible:
     resolveWebviewView(webviewView: vscode.WebviewView) {
       webviewView.webview.options = {
-        enableScripts: true, //enable JS
+        enableScripts: true,
       };
-      //Load bundled dashboard React file into the panel webview
       const sidebarPath = vscode.Uri.file(
         path.join(context.extensionPath, 'react-sidebar', 'dist', 'bundle.js')
       );
       const sidebarSrc = webviewView.webview.asWebviewUri(sidebarPath);
 
-      //Create Path and Src for CSS files
       const cssPath = path.join(
         context.extensionPath,
         'react-sidebar',
@@ -198,8 +195,6 @@ export function activate(context: vscode.ExtensionContext) {
         'style.css'
       );
       const cssSrc = webviewView.webview.asWebviewUri(vscode.Uri.file(cssPath));
-      //TO DO: Decide which content to allow in meta http-equiv Content security policy:
-      //<meta http-equiv="Content-Security-Policy" content="default-src 'none';">
       webviewView.webview.html = `
                 <!DOCTYPE html>
                 <html lang="en">
@@ -218,23 +213,30 @@ export function activate(context: vscode.ExtensionContext) {
                 </html>
             `;
 
-      //Handle messages or events from Sidebar webview view here
       webviewView.webview.onDidReceiveMessage((message) => {
-        //if message is sent from  sidepanel & and if the active document is html, then create a dashboard
-        if (message.message === 'scanDoc') {
-          //   &&  activeEditor && activeEditor.document.languageId === 'html'
+        const activeEditor: any = vscode.window.activeTextEditor;
+        let scoreData = [];
+        if (
+          message.message === 'scanDoc' &&
+          activeEditor.document.languageId === 'html'
+        ) {
           const panel = createDashboard(); //create dashboard panel webview when user clicks button
-          let results = compileLogic();
-          console.log(results);
-
-          let scoreData = getAccessScore(results);
-          panel.webview.postMessage({ data: results, recData: scoreData });
+          compileLogic(activeEditor)
+            .then((ariaRecs: { [key: string]: any }) => {
+              scoreData = getAccessScore(ariaRecs);
+              panel.webview.postMessage({ data: ariaRecs, recData: scoreData });
+            })
+            .catch((error: any) => {
+              console.log(
+                'An Error Occurred Retrieving Data for Dashboard',
+                error
+              );
+            });
         }
       });
     }
   }
 
-  //Register Primary Sidebar Provider
   const sidebarProvider = new SidebarProvider();
   const sidebarDisposable = vscode.window.registerWebviewViewProvider(
     'ludwigSidebarView',
@@ -242,7 +244,6 @@ export function activate(context: vscode.ExtensionContext) {
   );
   let dashboard: any = null;
 
-  //Create dashboard panel
   const createDashboard = () => {
     if (dashboard) {
       dashboard.dispose();

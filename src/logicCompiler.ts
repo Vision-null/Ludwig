@@ -1,21 +1,29 @@
-import * as vscode from 'vscode';
 const mariacheck = require('./maria-standard/allTheMarias');
 const { JSDOM } = require('jsdom');
+let body: any, document: any;
 
-export function compileLogic() {
-  const ariaRecommendations: AriaRecommendations = {};
-  const htmlCode = vscode.window.activeTextEditor.document.getText();
-  const dom = new JSDOM(htmlCode, {
+export function generateBody(source: any) {
+  const htmlCode = source.document.getText();
+  const { window } = new JSDOM(htmlCode, {
     url: 'http://ciafund.gov',
     pretendToBeVisual: true,
     includeNodeLocations: true,
   });
-  const body = dom.window.document.body;
+  document = window.document;
+  body = window.document.body;
+}
+
+export function getDocument() {
+  return document;
+}
+
+export async function compileLogic(activeEditor: any) {
+  const ariaRecommendations: AriaRecommendations = {};
+  generateBody(activeEditor);
 
   function tag(element: any) {
-    return body.querySelectorAll(element);
+    return document.querySelectorAll(element);
   }
-
   mariacheck.inputButtonText(tag('input'), ariaRecommendations);
   mariacheck.evalAnchors(tag('a'), ariaRecommendations);
   // mariacheck.AreaMapAltText(tag('alt'));
@@ -29,6 +37,7 @@ export function compileLogic() {
   // mariacheck.videoCaptions(tag('***'), ariaRecommendations);
   // mariacheck.labels(tag('input, ***, textarea'), ariaRecommendations);
   // mariacheck.ariaRoles(tag('***'), ariaRecommendations);
+  // console.log(ariaRecommendations);
   return ariaRecommendations;
 }
 

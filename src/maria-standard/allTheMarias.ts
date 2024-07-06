@@ -1,13 +1,9 @@
 const { ariaObject } = require('../aria-standards/critical/aria-object');
 
-function inputButtonText(
-  input: any,
-  getLineNumber: any,
-  ariaRecommendations: any
-) {
+function inputButtonText(input: any, ariaRecommendations: any) {
   const inputButtonsWithoutText: any[] = [];
   input.forEach((el: any) => {
-    const line = getLineNumber(el);
+    const line = Math.floor(Math.random() * 1000) + 1;
     inputButtonsWithoutText.push([el.outerHTML, line]);
     ariaRecommendations[line] = [ariaObject.inputButton, el.outerHTML];
   });
@@ -19,7 +15,7 @@ function evalAnchors(input: any, ariaRecommendations: any) {
   input.forEach((el: any) => {
     const ariaLabel = el.getAttribute('aria-label');
     if (!ariaLabel) {
-      const line = Math.floor(Math.random() * 5000) + 1;
+      const line = Math.floor(Math.random() * 1000) + 1;
       anchorsWithoutAriaLabel.push([el.outerHTML, line]);
       ariaRecommendations[line] = [ariaObject.anchorLabel, el.outerHTML];
     }

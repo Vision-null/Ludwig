@@ -1,0 +1,255 @@
+From 15885ca148132129675ca16e9738d016057f42cf Mon Sep 17 00:00:00 2001
+From: artmontinski <artmontinski@gmail.com>
+Date: Fri, 5 Jul 2024 06:49:14 -0700
+Subject: [PATCH] fixed sidebar plus colors
+
+---
+ react-dashboard/src/components/Bar.jsx | 12 ++++---
+ src/access-score.ts                    | 46 +++++++-------------------
+ src/extension.ts                       | 35 ++++++++++----------
+ src/logicCompiler.ts                   | 25 +++++++++-----
+ src/maria-standard/allTheMarias.ts     |  8 ++---
+ 5 files changed, 57 insertions(+), 69 deletions(-)
+
+diff --git a/react-dashboard/src/components/Bar.jsx b/react-dashboard/src/components/Bar.jsx
+index 53eac0dc..81f38e0f 100644
+--- a/react-dashboard/src/components/Bar.jsx
++++ b/react-dashboard/src/components/Bar.jsx
+@@ -22,7 +22,7 @@ const BarText = ({ x, y, index, datum }) => {
+ function Bar({ recommendations }) {
+   const data = recommendations.recData;
+ 
+-  const colorScale = ['#3a4750', '#be3144'];
++  const colorScale = ['#28a745', '#be3144'];
+   const pieSize = 400; // Size of the VictoryPie
+ 
+   // Calculate the center coordinates
+@@ -32,9 +32,13 @@ function Bar({ recommendations }) {
+     return { centerX, centerY };
+   }, [pieSize]);
+ 
+-  // if (data.length === 0) {
+-  //     return <h3 className='critical-small'>Score unavailable, please activate an HTML document before scanning</h3>;
+-  // }
++  if (data.length === 0) {
++    return (
++      <h3 className="critical-small">
++        Score unavailable, please activate an HTML document before scanning
++      </h3>
++    );
++  }
+   return (
+     <div className="panelContainer" style={{ width: 350 }}>
+       {/* in case lazy-loaded components are not yet available */}
+diff --git a/src/access-score.ts b/src/access-score.ts
+index e44df95d..688292ba 100644
+--- a/src/access-score.ts
++++ b/src/access-score.ts
+@@ -1,40 +1,18 @@
+-import { AriaRecommendations } from './logicCompiler';
+-import * as vscode from 'vscode';
+-import { JSDOM } from 'jsdom';
++import { getDocument } from './logicCompiler';
+ 
+-export default function getAccessScore(
+-  recs: AriaRecommendations
+-): { x: string; y: number }[] {
+-  // Get the active text editor from VS Code
+-  const activeEditor = vscode.window.activeTextEditor;
++export default function getAccessScore(recs: any): { x: string; y: number }[] {
++  const document = getDocument();
++  
+ 
+-  // Check if there is an active editor and it has a document
+-  if (activeEditor && activeEditor.document) {
+-    // Get the HTML code from the active document
+-    const htmlCode = activeEditor.document.getText();
++  const totalElements: number = document.querySelectorAll('*').length;
++  console.log(totalElements);
+ 
+-    // Create a virtual DOM using JSDOM
+-    const { window } = new JSDOM(htmlCode);
+-    const document = window.document;
++  const inaccessibleCount: number = Object.keys(recs).length;
+ 
+-    // Calculate the total number of elements in the HTML document
+-    const totalElements: number = Array.from(
+-      document.querySelectorAll('*')
+-    ).length;
++  const accessibleCount: number = totalElements - inaccessibleCount;
+ 
+-    // Calculate the total number of Aria recommendations
+-    const totalRecs: number = Object.keys(recs).length;
+-
+-    // Calculate the Accessible and Inaccessible counts
+-    const accessibleCount: number = totalElements - totalRecs;
+-    const inaccessibleCount: number = totalRecs;
+-
+-    return [
+-      { x: 'Accessible', y: accessibleCount },
+-      { x: 'Inaccessible', y: inaccessibleCount },
+-    ];
+-  } else {
+-    // Handle the case when there is no active editor or document
+-    throw new Error('No active editor or document found.');
+-  }
++  return [
++    { x: 'Accessible', y: accessibleCount },
++    { x: 'Inaccessible', y: inaccessibleCount },
++  ];
+ }
+diff --git a/src/extension.ts b/src/extension.ts
+index 2f70ee8f..81fcb87d 100644
+--- a/src/extension.ts
++++ b/src/extension.ts
+@@ -179,18 +179,15 @@ export function activate(context: vscode.ExtensionContext) {
+ 
+   //Primary Sidebar Webview View Provider
+   class SidebarProvider {
+-    //Call when view first becomes visible:
+     resolveWebviewView(webviewView: vscode.WebviewView) {
+       webviewView.webview.options = {
+-        enableScripts: true, //enable JS
++        enableScripts: true,
+       };
+-      //Load bundled dashboard React file into the panel webview
+       const sidebarPath = vscode.Uri.file(
+         path.join(context.extensionPath, 'react-sidebar', 'dist', 'bundle.js')
+       );
+       const sidebarSrc = webviewView.webview.asWebviewUri(sidebarPath);
+ 
+-      //Create Path and Src for CSS files
+       const cssPath = path.join(
+         context.extensionPath,
+         'react-sidebar',
+@@ -198,8 +195,6 @@ export function activate(context: vscode.ExtensionContext) {
+         'style.css'
+       );
+       const cssSrc = webviewView.webview.asWebviewUri(vscode.Uri.file(cssPath));
+-      //TO DO: Decide which content to allow in meta http-equiv Content security policy:
+-      //<meta http-equiv="Content-Security-Policy" content="default-src 'none';">
+       webviewView.webview.html = `
+                 <!DOCTYPE html>
+                 <html lang="en">
+@@ -218,23 +213,30 @@ export function activate(context: vscode.ExtensionContext) {
+                 </html>
+             `;
+ 
+-      //Handle messages or events from Sidebar webview view here
+       webviewView.webview.onDidReceiveMessage((message) => {
+-        //if message is sent from  sidepanel & and if the active document is html, then create a dashboard
+-        if (message.message === 'scanDoc') {
+-          //   &&  activeEditor && activeEditor.document.languageId === 'html'
++        const activeEditor: any = vscode.window.activeTextEditor;
++        let scoreData = [];
++        if (
++          message.message === 'scanDoc' &&
++          activeEditor.document.languageId === 'html'
++        ) {
+           const panel = createDashboard(); //create dashboard panel webview when user clicks button
+-          let results = compileLogic();
+-          console.log(results);
+-
+-          let scoreData = getAccessScore(results);
+-          panel.webview.postMessage({ data: results, recData: scoreData });
++          compileLogic(activeEditor)
++            .then((ariaRecs: { [key: string]: any }) => {
++              scoreData = getAccessScore(ariaRecs);
++              panel.webview.postMessage({ data: ariaRecs, recData: scoreData });
++            })
++            .catch((error: any) => {
++              console.log(
++                'An Error Occurred Retrieving Data for Dashboard',
++                error
++              );
++            });
+         }
+       });
+     }
+   }
+ 
+-  //Register Primary Sidebar Provider
+   const sidebarProvider = new SidebarProvider();
+   const sidebarDisposable = vscode.window.registerWebviewViewProvider(
+     'ludwigSidebarView',
+@@ -242,7 +244,6 @@ export function activate(context: vscode.ExtensionContext) {
+   );
+   let dashboard: any = null;
+ 
+-  //Create dashboard panel
+   const createDashboard = () => {
+     if (dashboard) {
+       dashboard.dispose();
+diff --git a/src/logicCompiler.ts b/src/logicCompiler.ts
+index 509f408e..4d5bef6f 100644
+--- a/src/logicCompiler.ts
++++ b/src/logicCompiler.ts
+@@ -1,21 +1,29 @@
+-import * as vscode from 'vscode';
+ const mariacheck = require('./maria-standard/allTheMarias');
+ const { JSDOM } = require('jsdom');
++let body: any, document: any;
+ 
+-export function compileLogic() {
+-  const ariaRecommendations: AriaRecommendations = {};
+-  const htmlCode = vscode.window.activeTextEditor.document.getText();
+-  const dom = new JSDOM(htmlCode, {
++export function generateBody(source: any) {
++  const htmlCode = source.document.getText();
++  const { window } = new JSDOM(htmlCode, {
+     url: 'http://ciafund.gov',
+     pretendToBeVisual: true,
+     includeNodeLocations: true,
+   });
+-  const body = dom.window.document.body;
++  document = window.document;
++  body = window.document.body;
++}
++
++export function getDocument() {
++  return document;
++}
++
++export async function compileLogic(activeEditor: any) {
++  const ariaRecommendations: AriaRecommendations = {};
++  generateBody(activeEditor);
+ 
+   function tag(element: any) {
+-    return body.querySelectorAll(element);
++    return document.querySelectorAll(element);
+   }
+-
+   mariacheck.inputButtonText(tag('input'), ariaRecommendations);
+   mariacheck.evalAnchors(tag('a'), ariaRecommendations);
+   // mariacheck.AreaMapAltText(tag('alt'));
+@@ -29,6 +37,7 @@ export function compileLogic() {
+   // mariacheck.videoCaptions(tag('***'), ariaRecommendations);
+   // mariacheck.labels(tag('input, ***, textarea'), ariaRecommendations);
+   // mariacheck.ariaRoles(tag('***'), ariaRecommendations);
++  // console.log(ariaRecommendations);
+   return ariaRecommendations;
+ }
+ 
+diff --git a/src/maria-standard/allTheMarias.ts b/src/maria-standard/allTheMarias.ts
+index e138a649..2bb90862 100644
+--- a/src/maria-standard/allTheMarias.ts
++++ b/src/maria-standard/allTheMarias.ts
+@@ -1,13 +1,9 @@
+ const { ariaObject } = require('../aria-standards/critical/aria-object');
+ 
+-function inputButtonText(
+-  input: any,
+-  getLineNumber: any,
+-  ariaRecommendations: any
+-) {
++function inputButtonText(input: any, ariaRecommendations: any) {
+   const inputButtonsWithoutText: any[] = [];
+   input.forEach((el: any) => {
+-    const line = getLineNumber(el);
++    const line = Math.floor(Math.random() * 5000) + 1;
+     inputButtonsWithoutText.push([el.outerHTML, line]);
+     ariaRecommendations[line] = [ariaObject.inputButton, el.outerHTML];
+   });
+-- 
+2.43.0
+
