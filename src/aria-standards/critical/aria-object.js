@@ -6,8 +6,8 @@ const ariaObject = {
   },
 
   elementRole: {
-      link: ['https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles'
-  ],
+      link: 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles'
+  ,
       desc: 'Element role must support ARIA attributes.' 
   },
 
@@ -17,10 +17,9 @@ const ariaObject = {
   },
 
   requiredAttributes: {
-      link: ['https://www.w3.org/TR/wai-aria/#introroles', 
-      'https://www.w3.org/TR/wai-aria-1.1/#state_prop_taxonomy '
-  ],
-      desc: 'Elements with ARIA roles are required to have all required ARIA attributes.'
+      link: 'https://www.w3.org/TR/wai-aria/#introroles',
+      desc: 'Elements with ARIA roles are required to have all required ARIA attributes.',
+      additionalLinks: ['https://www.w3.org/TR/wai-aria-1.1/#state_prop_taxonomy']
   },
 
   childRoles: {
@@ -34,10 +33,9 @@ const ariaObject = {
   },
 
   validValueForRole: {
-      link: ['https://www.w3.org/TR/wai-aria-1.1/#roles', 
-      'https://a11ysupport.io/tests/tech__html__role-attribute '
-  ],
-      desc: 'All elements with a role attribute use a valid value.'
+      link: 'https://www.w3.org/TR/wai-aria-1.1/#roles',
+      desc: 'All elements with a role attribute use a valid value.',
+      additionalLinks: ['https://a11ysupport.io/tests/tech__html__role-attribute']
   },
    
   allAriasAreValid: {
@@ -56,13 +54,11 @@ const ariaObject = {
   },
 
   imageAlts: {
-      link: [
-          'https://www.w3.org/WAI/WCAG21/Techniques/failures/F65.html',
-          'https://www.w3.org/WAI/WCAG21/Techniques/html/H37.html',
+      link: 'https://www.w3.org/WAI/WCAG21/Techniques/failures/F65.html',
+      desc: '```<img>``` elements require alternate text or a role of none or presentation.',
+      additionalLinks: ['https://www.w3.org/WAI/WCAG21/Techniques/html/H37.html',
           'https://www.w3.org/WAI/WCAG21/Techniques/html/H67.html',
-          'https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA10.html'
-      ],
-      desc: '```<img>``` elements require alternate text or a role of none or presentation.'
+          'https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA10.html']
   },
 
   inputButton: {
@@ -71,31 +67,25 @@ const ariaObject = {
   }, 
 
   inputImageAltText: {
-      link: [
-          'https://www.w3.org/WAI/WCAG21/Techniques/failures/F65.html',
-          'https://www.w3.org/WAI/WCAG21/Techniques/html/H36.html'
-      ],
-      desc: '```<input type=”image”>``` elements require alternative text.'
+      link: 'https://www.w3.org/WAI/WCAG21/Techniques/failures/F65.html',
+      desc: '```<input type=”image”>``` elements require alternative text.',
+      additionalLinks: ['https://www.w3.org/WAI/WCAG21/Techniques/html/H36.html']
   },
 
   formsHaveLabels: {
-      link: [
-          'https://www.w3.org/WAI/tutorials/forms/labels/',
-          'https://www.w3.org/WAI/WCAG21/Techniques/failures/F68.html',
+      link: 'https://www.w3.org/WAI/tutorials/forms/labels/',
+      desc: 'All forms must have appropriate labels.',
+      additionalLinks: ['https://www.w3.org/WAI/WCAG21/Techniques/failures/F68.html',
           'https://www.w3.org/WAI/WCAG21/Techniques/html/H44.html',
           'https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA16.html',
           'https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA14.html',
-          'https://www.w3.org/WAI/WCAG21/Techniques/html/H65.html'
-      ],
-      desc: 'All forms must have appropriate labels.'
+          'https://www.w3.org/WAI/WCAG21/Techniques/html/H65.html']
   },
 
   metaEquivRefresh: {
-      link: [
-          'https://www.w3.org/WAI/WCAG21/Techniques/html/H76.html',
-          'https://www.w3.org/WAI/WCAG21/Techniques/failures/F41.html'
-      ],
-      desc: '```<meta http-equiv=”refresh”>``` should not be used for delayed refresh.'
+      link: 'https://www.w3.org/WAI/WCAG21/Techniques/html/H76.html',
+      desc: '```<meta http-equiv=”refresh”>``` should not be used for delayed refresh.',
+      additionalLinks: ['https://www.w3.org/WAI/WCAG21/Techniques/failures/F41.html']
   },
 
   metaViewport: {
@@ -109,11 +99,9 @@ const ariaObject = {
   },
 
   videoCaptions: {
-      link: [
-      'https://www.w3.org/WAI/WCAG21/Techniques/general/G87.html',
-      'https://www.w3.org/WAI/WCAG21/Techniques/general/G93.html'
-      ],
-      desc: '```<video>``` elements must have captions.'
+      link: 'https://www.w3.org/WAI/WCAG21/Techniques/general/G87.html',
+      desc: '```<video>``` elements must have captions.',
+      additionalLinks: ['https://www.w3.org/WAI/WCAG21/Techniques/general/G93.html']
   },
 
   anchorLabel: {

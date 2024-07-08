@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Score from './components/Score';
-import IssueTable from './components/IssueTable';
+import Issues from './components/Issues';
 
 
 export default function App() {
 
-  const [recommendations, setRecommendations] = useState({data:{}, recData:[]});
+  const [ariaRecommendations, setAriaRecommendations] = useState({});
 
   useEffect(() =>{
     window.addEventListener('message', (event) => {
  
-      const message = event.data;
-      if(message) {
-        setRecommendations(message);
+      const recs = event.data;
+      if(recs) {
+        setAriaRecommendations(recs);
         // console.log('Received message in Dashboard App:', message);
       }
     });
@@ -20,8 +20,8 @@ export default function App() {
  
   return (
     <div style={{margin:15}}>
-      <Score recommendations={recommendations}/>
-      <IssueTable recommendations={recommendations}/>
+      <Score ariaRecommendations={ariaRecommendations}/>
+      <Issues ariaRecommendations={ariaRecommendations}/>
     </div>
   );
 }

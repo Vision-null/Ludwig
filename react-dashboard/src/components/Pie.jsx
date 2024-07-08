@@ -4,13 +4,13 @@ import React, { Suspense, useMemo, memo } from 'react';
 const LazyVictoryPie = React.lazy(() =>
   import('victory').then(({ VictoryPie }) => ({ default: VictoryPie }))
 );
-const LazyVictoryLabel = React.lazy(() =>
+const LazyVictoryLabel = React.lazy(() => 
   import('victory').then(({ VictoryLabel }) => ({ default: VictoryLabel }))
 );
 
 //Component to style text on progress bar
-const BarText = ({ x, y, index, datum }) => {
-  const textColor = '#d3d6db';
+const PieText = ({ x, y, index, datum }) => {
+  const textColor = '#d3d6db'; 
   const fontSize = 17;
   return (
     <text x={x} y={y} textAnchor="middle" style={{ fill: textColor, fontSize }}>
@@ -19,10 +19,8 @@ const BarText = ({ x, y, index, datum }) => {
   );
 };
 
-function Bar({ recommendations }) {
-  const data = recommendations.recData;
-
-  const colorScale = ['#28a745', '#be3144'];
+function Pie(scoreData) {
+  const colorScale = ["#3a4750", "#be3144"];
   const pieSize = 400; // Size of the VictoryPie
 
   // Calculate the center coordinates
@@ -32,42 +30,33 @@ function Bar({ recommendations }) {
     return { centerX, centerY };
   }, [pieSize]);
 
-  if (data.length === 0) {
-    return (
-      <h3 className="critical-small">
-        Score unavailable, please activate an HTML document before scanning
-      </h3>
-    );
+  if (scoreData.length === 0) {
+      return <h3 className='critical-small'>Score unavailable, please activate an HTML document before scanning</h3>;
   }
-  return (
-    <div className="panelContainer" style={{ width: 350 }}>
+
+  return (  
+    <div className='panelContainer' style={{width:350}}>
       {/* in case lazy-loaded components are not yet available */}
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div>Loading...</div>}> 
         <LazyVictoryPie
           padAngle={2}
           innerRadius={100}
           width={pieSize}
           height={pieSize}
-          data={data}
+          data={scoreData}
           colorScale={colorScale}
           style={{ position: 'relative' }}
-          labelComponent={<BarText />}
+          labelComponent={<PieText />}
         />
         <LazyVictoryLabel
-          text={`${((data[0].y / (data[0].y + data[1].y)) * 100).toFixed(0)}%`}
+          text={`${(((scoreData[0].y)/(scoreData[0].y + scoreData[1].y))*100).toFixed(0)}%`}
           textAnchor="middle"
           verticalAnchor="middle"
-          style={{
-            fontSize: 50,
-            fill: '#d3d6db',
-            position: 'absolute',
-            top: centerY - 25,
-            left: centerX - 35,
-          }}
+          style={{ fontSize: 50, fill: '#d3d6db', position: 'absolute', top: centerY - 25, left: centerX - 35}}
         />
       </Suspense>
     </div>
   );
 }
 
-export default memo(Bar);
+export default memo(Pie);
