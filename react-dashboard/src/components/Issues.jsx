@@ -1,29 +1,29 @@
 import React, { memo } from 'react';
+import PropTypes from 'prop-types'; // If you decide to use PropTypes for prop validation
 import { IssuesTable } from './IssuesTable';
 import { ariaObject } from '../../../src/aria-standards/critical/aria-object';
 
-function Issues (ariaRecommendations) {
-
+function Issues({ ariaRecommendations }) {
   const issues = [];
 
   for (const [ariaObjKey, recsArrays] of Object.entries(ariaRecommendations)) {
-    // skip totalElements key
     if (ariaObjKey === 'totalElements') {
-        continue;
+      continue;
     }
+    const description = ariaObject[ariaObjKey]?.desc?.replaceAll('```', '') || 'Description not available';
     issues.push(
-        <div>
-            <h5>{ariaObject[ariaObjKey].desc.replaceAll('```','')}</h5>
-            <h5>{recsArrays.length} issues found</h5>
-            <IssuesTable ariaObjKey={ariaObjKey} data={recsArrays} />
-        </div>
+      <div key={ariaObjKey}>
+        <h5>{description}</h5>
+        <h6>{recsArrays.length} issues found</h6>
+        <IssuesTable ariaObjKey={ariaObjKey} data={recsArrays} />
+      </div>
     );
   }
-  
-  return(
+
+  return (
     <>
-    <h2>Summary of Issues: </h2>
-    {issues}
+      <h2>Summary of Issues: </h2>
+      {issues}
     </>
   );
 }

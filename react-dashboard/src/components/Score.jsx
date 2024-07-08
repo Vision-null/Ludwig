@@ -1,7 +1,7 @@
-import React, { useState, useRef, memo } from 'react';
+import React, { memo } from 'react';
 import Pie from './Pie';
 
-function Score (ariaRecommendations) {
+function Score ({ariaRecommendations}) {
   // count inaccessible elements
   let inaccessibleCount = 0;
   for (const ariaObjKey of Object.keys(ariaRecommendations)) {
@@ -15,9 +15,10 @@ function Score (ariaRecommendations) {
   const accessibleCount = ariaRecommendations.totalElements - inaccessibleCount;
 
   // format data for Pie component
-  const scoreData = [];
-  scoreData.push({ x: 'Accessible', y: accessibleCount });
-  scoreData.push({ x: 'Inaccessible', y: inaccessibleCount });
+  const scoreData = [
+    { x: 'Accessible', y: accessibleCount },
+    { x: 'Inaccessible', y: inaccessibleCount },
+  ];
 
   return (
     <div>

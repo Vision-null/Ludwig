@@ -19,7 +19,7 @@ const PieText = ({ x, y, index, datum }) => {
   );
 };
 
-function Pie(scoreData) {
+function Pie({scoreData}) {
   const colorScale = ["#3a4750", "#be3144"];
   const pieSize = 400; // Size of the VictoryPie
 
