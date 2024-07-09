@@ -1,14 +1,117 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
+import { ESLint } from 'eslint';
+import console from 'console';
 import { registerScanAllDocsCommand } from './commands/scanAllDocsCommand';
 import { registerScanDocCommand } from './commands/scanDocCommand';
 import { SidebarWebviewProvider } from './views/SidebarWebviewProvider';
 
+// Define a DiagnosticCollection to store linting results
+let diagnosticCollection: vscode.DiagnosticCollection;
+
+// Define interfaces for linting results
+interface LintMessage {
+  message: string;
+  severity: number;
+  line: number;
+  column: number;
+}
+
+interface LintResult {
+  filePath: string;
+  messages: LintMessage[];
+}
+
+// Function to run ESLint on the current document
+export async function runESLint(document: vscode.TextDocument): Promise<ESLint.LintResult[]> {
+  const eslint = new ESLint({
+    overrideConfigFile: path.resolve(__dirname, '..', '.eslintrc.accessibility.json'),
+    useEslintrc: false,
+  });
+  const text = document.getText();
+  const results = await eslint.lintText(text, {
+    filePath: document.fileName,
+  });
+
+  console.log(results);
+
+  return results.map((result) => ({
+    filePath: result.filePath,
+    messages: result.messages.map((message) => ({
+      ruleId: message.ruleId,
+      message: message.message,
+      severity: message.severity,
+      line: message.line,
+      column: message.column,
+    })),
+    suppressedMessages: [],
+    errorCount: result.errorCount,
+    warningCount: result.warningCount,
+    fixableErrorCount: result.fixableErrorCount,
+    fixableWarningCount: result.fixableWarningCount,
+    source: result.source,
+    usedDeprecatedRules: result.usedDeprecatedRules,
+    fatalErrorCount: result.fatalErrorCount,
+  }));
+}
+
+// Function to check the document using ESLint and format the results
+export async function eslintCheck() {
+  const editor = vscode.window.activeTextEditor;
+  if (editor) {
+    const doc = editor.document;
+    const results: ESLint.LintResult[] = await runESLint(doc);
+
+    const eslint = new ESLint();
+    const formatCode = await eslint.loadFormatter('json');
+    const resultText = formatCode.format(results);
+    console.log(resultText);
+    return { document: doc, results };
+  }
+  return null;
+}
+
+// Function to register the getResults command and set up diagnostics
+function registerGetResultsCommand(context: vscode.ExtensionContext) {
+  diagnosticCollection = vscode.languages.createDiagnosticCollection('jsx_eslint');
+
+  const useDiagnostics = (document: vscode.TextDocument, results: ESLint.LintResult[]) => {
+    const diagnostics: vscode.Diagnostic[] = [];
+
+    results.forEach((result) => {
+      result.messages.forEach((msg) => {
+        const range = new vscode.Range(
+          new vscode.Position(msg.line - 1, msg.column - 1),
+          new vscode.Position(msg.line - 1, msg.column - 1),
+        );
+        const diagnostic = new vscode.Diagnostic(
+          range,
+          msg.message,
+          msg.severity === 2 ? vscode.DiagnosticSeverity.Error : vscode.DiagnosticSeverity.Warning,
+        );
+        diagnostics.push(diagnostic);
+      });
+    });
+
+    diagnosticCollection.set(document.uri, diagnostics);
+  };
+
+  const disposable = vscode.commands.registerCommand('ludwig.getResults', async () => {
+    const checkResults = await eslintCheck();
+    if (checkResults) {
+      const { document, results } = checkResults;
+      useDiagnostics(document, results);
+      vscode.window.showInformationMessage('ESLint Accessibility Check Completed.');
+    }
+  });
+
+  context.subscriptions.push(disposable, diagnosticCollection);
+}
+
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "Ludwig" is now active!');
 
-  const primarySidebarWebview = new SidebarWebviewProvider(
-    context.extensionUri
-  );
+  const primarySidebarWebview = new SidebarWebviewProvider(context.extensionUri);
   const sidebarWebviewDisposable = vscode.window.registerWebviewViewProvider(
     SidebarWebviewProvider.viewType,
     primarySidebarWebview
@@ -16,12 +119,16 @@ export function activate(context: vscode.ExtensionContext) {
   registerScanDocCommand(context);
   registerScanAllDocsCommand(context);
 
+  // Register the getResults command
+  registerGetResultsCommand(context);
+
   context.subscriptions.push(sidebarWebviewDisposable);
 }
 
 export function deactivate() {
   vscode.window.showInformationMessage('Goodbye');
 }
+
 
 //
 //
