@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { IssuesTable } from './IssuesTable';
+import { IssueTable } from './IssueTable';
 import { ariaObject } from '../../../src/aria-standards/critical/aria-object';
 
 function Issues({ ariaRecommendations }) {
@@ -14,7 +14,7 @@ function Issues({ ariaRecommendations }) {
       <div key={ariaObjKey}>
         <h5>{description}</h5>
         <h6>{recsArrays.length} issues found</h6>
-        <IssuesTable ariaObjKey={ariaObjKey} data={recsArrays} />
+        <IssueTable ariaObjKey={ariaObjKey} data={recsArrays} />
       </div>
     );
   }

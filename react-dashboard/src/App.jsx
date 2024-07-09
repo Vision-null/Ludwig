@@ -7,15 +7,20 @@ export default function App() {
 
   const [ariaRecommendations, setAriaRecommendations] = useState({});
 
-  useEffect(() =>{
-    window.addEventListener('message', (event) => {
- 
+  useEffect(() => {
+    const handleEvent = (event) => {
       const recs = event.data;
-      if(recs) {
+      if (recs) {
         setAriaRecommendations(recs);
-        // console.log('Received message in Dashboard App:', message);
       }
-    });
+    };
+  
+    window.addEventListener('message', handleEvent);
+  
+    // Cleanup function to remove the event listener
+    return () => {
+      window.removeEventListener('message', handleEvent);
+    };
   }, []);
  
   return (

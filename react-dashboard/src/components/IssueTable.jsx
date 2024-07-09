@@ -1,5 +1,7 @@
 import { ariaObject } from '../../../src/aria-standards/critical/aria-object';
-import React, { useState, useRef, memo } from 'react';
+import React, { memo } from 'react';
+import crypto from 'crypto';
+
 
 function IssueTable ({ariaObjKey, data}) {
   
