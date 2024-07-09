@@ -1,18 +1,16 @@
 const { getLineNumber } = require('../../getLineNumber');
 
-// logic for if anchors have a label
+// logic for if anchors have an aria-label
 function anchorLabelCheck(nodes) {
-// input: nodesArray
-// output: array of recs, where each rec is [lineNumber, node.outerHTML]
-
 
   const recs = [];
 
   nodes.forEach((node) => {
 
     const ariaLabel = node.getAttribute('aria-label');
+    const ariaLabelledBy = node.getAttribute('aria-labelledby');
 
-    if (!ariaLabel) {
+    if (!ariaLabel && !ariaLabelledBy) {
 
       const lineNumber = getLineNumber(node);
 

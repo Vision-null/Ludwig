@@ -2,18 +2,18 @@ const { getLineNumber } = require('../../getLineNumber');
 
 // <area> elements of image maps have alternate text
 function areaAltTextCheck(nodes) {
-// input: nodesArray
-// output: array of recs, where each rec is [lineNumber, node.outerHTML]
 
   const recs = [];
 
   nodes.forEach((node) => {
 
     const altText = node.getAttribute('alt');
+    const ariaLabel = node.getAttribute('aria-label');
+    const ariaLabelledby = node.getAttribute('aria-labelledby');
 
-    if (!altText | altText === '') {
+    if (!altText && !ariaLabel && !ariaLabelledby) {
 
-      let lineNumber = getLineNumber(node);
+      const lineNumber = getLineNumber(node);
 
       recs.push([lineNumber, node.outerHTML]);
     }

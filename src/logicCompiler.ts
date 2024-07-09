@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 const { JSDOM } = require('jsdom');
 
-const { anchorLabelCheck } = require('./aria-standards/critical/anchor-labels.js'); // I only changed checker functions for this one
-const { areaAltTextCheck } = require('./aria-standards/critical/area-maps-alt-text.js'); // and this one so far; use as template for others
+const { anchorLabelCheck } = require('./aria-standards/critical/anchor-labels.js');
+const { areaAltTextCheck } = require('./aria-standards/critical/area-maps-alt-text.js');
 const { ariaHiddenCheck } = require('./aria-standards/critical/aria-hidden.js');
 const { discernibleButtonTextCheck } = require('./aria-standards/critical/button-text.js');
 const { imageAltsCheck } = require('./aria-standards/critical/img-alt-text.js');
@@ -14,8 +14,6 @@ const { uniqueIDsCheck } = require('./aria-standards/critical/unique-ids.js');
 const { videoCaptionsCheck } = require('./aria-standards/critical/video-captions.js');
 const { formsHaveLabelsCheck } = require('./aria-standards/critical/form-labels.js');
 const { checkAriaRoles } = require('./aria-standards/critical/role-support-aria-attribute.js'); // this is the only one I left completely unchanged... it's hairy
-
-const { ariaObject } = require('./aria-standards/critical/aria-object.js');
 
 
 export interface AriaRecommendations {
@@ -87,6 +85,7 @@ export function compileLogic() {
     // ARIAlogic - forms have labels
     ariaRecommendations.formsHaveLabels = formsHaveLabelsCheck(tag('form'));
 
+
 // I'M HOLDING OFF ON THIS ONE FOR NOW - Spencer 7/4/24
     // // role-support-aria-attribute
     // const roleSupportHtml = checkAriaRoles();
@@ -95,6 +94,7 @@ export function compileLogic() {
     //     ariaRecommendations[element[2]] = [{link: element[1], desc: 'Please select "Read More" below to see documentation for this error.'}, element[0]];
     // });
 
+    
     // delete any properties that hold empty arrays
     for (const key in ariaRecommendations) {
         if (Array.isArray(ariaRecommendations[key]) && ariaRecommendations[key].length === 0) {
@@ -105,6 +105,8 @@ export function compileLogic() {
     // create totalElements property with total number of elements in the document
     const totalElements: number = body.querySelectorAll('*').length;
     ariaRecommendations.totalElements = totalElements;
+    // the reason for saving the total number of elements in the document now is because this is the only place in the code where we create the JSDOM
+    // totalElements will be used in the react dashboard to calculate the percentage of elements that are accessible
 
     // RETURN FINAL OBJECT
     return ariaRecommendations;

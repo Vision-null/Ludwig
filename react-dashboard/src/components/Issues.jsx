@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import PropTypes from 'prop-types'; // If you decide to use PropTypes for prop validation
 import { IssuesTable } from './IssuesTable';
 import { ariaObject } from '../../../src/aria-standards/critical/aria-object';
 
