@@ -4,19 +4,20 @@ module.exports = function (results, context) {
   // extraction helper func
   const extractError = () => {
     const outputObj = {};
-    console.log(results);
+    console.log("result", results);
     results.forEach((el) => {
       el.messages.forEach((mess) => {
+        console.log("el.messages: ", el.messages)
         console.log('mess: ', mess);
-        const keyname = mess.line.toString().concat(':').concat(mess.column.toString());
+        // const keyname = mess.line.toString().concat(':').concat(mess.column.toString());
 
-        console.log(mess);
+        // console.log("mess: ", mess);
         // console.log('mess.line: ', mess.line);
         // console.log('keyname: ', typeof keyname);
         // console.log('column: ', typeof mess.column);
 
-        if (!outputObj.keyname) {
-          outputObj[keyname] = mess;
+        if (!outputObj) {
+          outputObj['test'] = mess;
         }
       });
     });
@@ -36,7 +37,7 @@ module.exports = function (results, context) {
     });
   };
 
-  // extractFile();
+  extractFile();
 
   const summary = results.reduce(
     (seq, current) => {
