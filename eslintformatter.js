@@ -4,20 +4,29 @@ module.exports = function (results, context) {
   // extraction helper func
   const extractError = () => {
     const outputObj = {};
-    console.log("result", results);
+    // console.log("result", results);
     results.forEach((el) => {
-      el.messages.forEach((mess) => {
-        console.log("el.messages: ", el.messages)
-        console.log('mess: ', mess);
-        // const keyname = mess.line.toString().concat(':').concat(mess.column.toString());
 
+      const { filePath } = el
+      // console.log(filePath);
+      let fp = filePath.split('/');
+      console.log(fp)
+      const fPath = fp[fp.length - 1];
+
+      console.log('FilePath: ', fPath);
+
+      el.messages.forEach((mess) => {
+        // console.log("el.messages: ", el.messages)
+        // console.log('mess: ', mess);
+        const keyname = fPath.concat('--').concat(mess.line.toString()).concat(':').concat(mess.column.toString());
+        // console.log(keyname);
         // console.log("mess: ", mess);
         // console.log('mess.line: ', mess.line);
         // console.log('keyname: ', typeof keyname);
         // console.log('column: ', typeof mess.column);
 
-        if (!outputObj) {
-          outputObj['test'] = mess;
+        if (!outputObj[keyname]) {
+          outputObj[keyname] = mess;
         }
       });
     });
@@ -28,16 +37,16 @@ module.exports = function (results, context) {
   extractError();
   // only extract eslint by fileId
 
-  const extractFile = () => {
-    // console.log(results);
-    results.forEach((el) => {
-      const { filePath } = el;
-      const file = filePath.split('/');
-      return console.log(`File Path: ${file[file.length - 1]}`);
-    });
-  };
+  // const extractFile = () => {
+  //   // console.log(results);
+  //   results.forEach((el) => {
+  //     const { filePath } = el;
+  //     const file = filePath.split('/');
+  //     return console.log(`File Path: ${file[file.length - 2]}/${file[file.length - 1]}`);
+  //   });
+  // };
 
-  extractFile();
+  // extractFile();
 
   const summary = results.reduce(
     (seq, current) => {
