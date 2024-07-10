@@ -13,7 +13,6 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:ludwig.getResults",
     "onLanguage:javascriptreact",
     "onLanguage:typescriptreact"
   ],
@@ -74,7 +73,7 @@
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
-    "lint": "eslint src --ext ts",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "vscode-test"
   },
   "devDependencies": {
@@ -89,8 +88,10 @@
     "babel-loader": "^9.1.3",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^7.1.2",
-    "eslint": "^8.57.0",
+    "eslint-formatter-stylish": "^8.40.0",
+    "eslint-loader": "^4.0.2",
     "eslint-plugin-jsx-a11y": "^6.9.0",
+    "eslint-webpack-plugin": "^4.2.0",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.5",
@@ -99,6 +100,7 @@
   },
   "dependencies": {
     "bufferutil": "^4.0.8",
+    "eslint": "9.6.0",
     "jsdom": "^24.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

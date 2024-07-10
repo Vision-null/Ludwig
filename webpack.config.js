@@ -1,4 +1,5 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const path = require('path');
 
 const config = {
@@ -39,6 +40,25 @@ const config = {
       },
     ],
   },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new ESLintPlugin({
+      extensions: ['js', 'jsx', 'ts', 'tsx'],
+      overrideConfigFile: path.resolve(__dirname, '.eslintrc.accessibility.json'),
+      context: path.resolve(__dirname, 'src'),
+      emitWarning: true,
+    }),
+  ],
+  ignoreWarnings: [
+    {
+      module: /node_modules/,
+      message: /the request of a dependency is an expression/,
+    },
+    {
+      module: /node_modules/,
+      message: /Critical dependency/,
+    },
+  ],
   // devtool: 'nosources-source-map',
   infrastructureLogging: {
     level: 'log',
@@ -75,8 +95,17 @@ const reactConfig = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(), // Add the plugin here
-    // Your existing plugins
+    new CleanWebpackPlugin(),
+  ],
+  ignoreWarnings: [
+    {
+      module: /node_modules/,
+      message: /the request of a dependency is an expression/,
+    },
+    {
+      module: /node_modules/,
+      message: /Critical dependency/,
+    },
   ],
   // devtool: 'source-map',
 };
