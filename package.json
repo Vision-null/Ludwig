@@ -75,7 +75,7 @@
     "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
     "lint": "eslint . -c {.js,.jsx,.ts,.tsx}",
     "test": "vscode-test",
-    "useLint": "eslint -f ./eslintformatter.js  --config eslint.config.js 'src/**/*.{js,jsx}'"
+    "useLint": "eslint -f ./eslintformatter.js  --config eslint.config.js 'src/**/*.jsx'"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
