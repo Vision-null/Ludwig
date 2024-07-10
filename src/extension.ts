@@ -39,8 +39,28 @@ export async function runESLint(document: vscode.TextDocument): Promise<ESLint.L
     filePath: document.fileName,
   });
 
-  console.log(results);
+  console.log("results: ", results);
 
+
+
+  console.log(results.map((result) => ({
+    filePath: result.filePath,
+    messages: result.messages.map((message) => ({
+      ruleId: message.ruleId,
+      message: message.message,
+      severity: message.severity,
+      line: message.line,
+      column: message.column,
+    })),
+    suppressedMessages: [],
+    errorCount: result.errorCount,
+    warningCount: result.warningCount,
+    fixableErrorCount: result.fixableErrorCount,
+    fixableWarningCount: result.fixableWarningCount,
+    source: result.source,
+    usedDeprecatedRules: result.usedDeprecatedRules,
+    fatalErrorCount: result.fatalErrorCount,
+  })));
   return results.map((result) => ({
     filePath: result.filePath,
     messages: result.messages.map((message) => ({
@@ -103,6 +123,7 @@ function registerGetResultsCommand(context: vscode.ExtensionContext) {
           msg.severity === 2 ? vscode.DiagnosticSeverity.Error : vscode.DiagnosticSeverity.Warning,
         );
         diagnostics.push(diagnostic);
+        console.log("diagnostics: ", diagnostics);
       });
     });
 
