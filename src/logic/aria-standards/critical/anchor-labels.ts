@@ -14,6 +14,5 @@ export function anchorLabelCheck(nodes: any[]) {
       recs.push([lineNumber, node.outerHTML]);
     }
   });
-
   return recs;
 }

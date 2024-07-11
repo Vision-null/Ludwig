@@ -92,9 +92,9 @@ const htmlCode = `
 </html>
 `;
 
-const { window } = new JSDOM(htmlCode);
-const document = window.document;
-const ludwig = document.body;
+const jsdomInstance= new JSDOM(htmlCode);
+const domDocument = jsdomInstance.window.document;
+const ludwig = domDocument.body;
 
 // check to see if an element’s role supports its ARIA attributes
 function checkParentRole() {
