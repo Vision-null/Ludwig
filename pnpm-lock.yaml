@@ -14,6 +14,9 @@ importers:
       eslint:
         specifier: 9.6.0
         version: 9.6.0
+      eslint-config-airbnb:
+        specifier: ^19.0.4
+        version: 19.0.4(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.16.0(eslint@9.6.0)(typescript@5.5.3))(eslint@9.6.0))(eslint-plugin-jsx-a11y@6.9.0(eslint@9.6.0))(eslint-plugin-react-hooks@4.6.2(eslint@9.6.0))(eslint-plugin-react@7.34.3(eslint@9.6.0))(eslint@9.6.0)
       jsdom:
         specifier: ^24.1.0
         version: 24.1.0(bufferutil@4.0.8)
@@ -1442,16 +1445,22 @@ packages:
     engines: {node: '>=8'}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   doctrine@2.1.0:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
     engines: {node: '>=0.10.0'}
 
+<<<<<<< HEAD
   doctrine@3.0.0:
     resolution: {integrity: sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==}
     engines: {node: '>=6.0.0'}
 
 =======
 >>>>>>> a0a5a1f8 (Update code to try and fix getResults command)
+=======
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
@@ -1531,6 +1540,9 @@ packages:
     engines: {node: '>=10'}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   eslint-config-airbnb-base@15.0.0:
     resolution: {integrity: sha512-xaX3z4ZZIcFLvh2oUNvcX5oEofXda7giYmuplVxoOg5A7EXJMrUyqRgR+mhDhPK8LZ4PttFOBvCYDbX3sUoUig==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -1548,18 +1560,27 @@ packages:
       eslint-plugin-react: ^7.28.0
       eslint-plugin-react-hooks: ^4.3.0
 
+<<<<<<< HEAD
 =======
 >>>>>>> a0a5a1f8 (Update code to try and fix getResults command)
+=======
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   eslint-formatter-stylish@8.40.0:
     resolution: {integrity: sha512-blbD5ZSQnjNEUaG38VCO4WG9nfDQWE8/IOmt8DFRHXUIfZikaIXmsQTdWNFk0/e0j7RgIVRza86MpsJ+aHgFLg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   eslint-import-resolver-node@0.3.9:
     resolution: {integrity: sha512-WFj2isz22JahUv+B788TlO3N6zL3nNJGU8CcZbPZvVEkBPaJdCV4vy5wyghty5ROFbCRnm132v8BScu5/1BQ8g==}
 
 =======
 >>>>>>> a0a5a1f8 (Update code to try and fix getResults command)
+=======
+  eslint-import-resolver-node@0.3.9:
+    resolution: {integrity: sha512-WFj2isz22JahUv+B788TlO3N6zL3nNJGU8CcZbPZvVEkBPaJdCV4vy5wyghty5ROFbCRnm132v8BScu5/1BQ8g==}
+
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   eslint-loader@4.0.2:
     resolution: {integrity: sha512-EDpXor6lsjtTzZpLUn7KmXs02+nIjGcgees9BYjNkWra3jVq5vVa8IoCKgzT2M7dNNeoMBtaSG83Bd40N3poLw==}
     engines: {node: '>= 10.13.0'}
@@ -1569,6 +1590,9 @@ packages:
       webpack: ^4.0.0 || ^5.0.0
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   eslint-module-utils@2.8.1:
     resolution: {integrity: sha512-rXDXR3h7cs7dy9RNpUlQf80nX31XWJEyGq1tRMo+6GsO5VmTe4UTwtmonAD4ZkAsrfMVDA2wlGJ3790Ys+D49Q==}
     engines: {node: '>=4'}
@@ -1600,8 +1624,11 @@ packages:
       '@typescript-eslint/parser':
         optional: true
 
+<<<<<<< HEAD
 =======
 >>>>>>> a0a5a1f8 (Update code to try and fix getResults command)
+=======
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   eslint-plugin-jsx-a11y@6.9.0:
     resolution: {integrity: sha512-nOFOCaJG2pYqORjK19lqPqxMO/JpvdCZdPtNdxY3kvom3jTvkAbOvQvD8wuD0G8BYR0IGAGYDlzqWJOh/ybn2g==}
     engines: {node: '>=4.0'}
@@ -4751,16 +4778,22 @@ snapshots:
       path-type: 4.0.0
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   doctrine@2.1.0:
     dependencies:
       esutils: 2.0.3
 
+<<<<<<< HEAD
   doctrine@3.0.0:
     dependencies:
       esutils: 2.0.3
 
 =======
 >>>>>>> a0a5a1f8 (Update code to try and fix getResults command)
+=======
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   eastasianwidth@0.2.0: {}
 
   electron-to-chromium@1.4.820: {}
@@ -4893,15 +4926,24 @@ snapshots:
   escape-string-regexp@4.0.0: {}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   eslint-config-airbnb-base@15.0.0(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       confusing-browser-globals: 1.0.11
       eslint: 8.57.0
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)
+=======
+  eslint-config-airbnb-base@15.0.0(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.16.0(eslint@9.6.0)(typescript@5.5.3))(eslint@9.6.0))(eslint@9.6.0):
+    dependencies:
+      confusing-browser-globals: 1.0.11
+      eslint: 9.6.0
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.16.0(eslint@9.6.0)(typescript@5.5.3))(eslint@9.6.0)
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
       object.assign: 4.1.5
       object.entries: 1.1.8
       semver: 6.3.1
 
+<<<<<<< HEAD
   eslint-config-airbnb@19.0.4(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0))(eslint-plugin-jsx-a11y@6.9.0(eslint@8.57.0))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.0))(eslint-plugin-react@7.34.3(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
@@ -4915,6 +4957,19 @@ snapshots:
 
 =======
 >>>>>>> a0a5a1f8 (Update code to try and fix getResults command)
+=======
+  eslint-config-airbnb@19.0.4(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.16.0(eslint@9.6.0)(typescript@5.5.3))(eslint@9.6.0))(eslint-plugin-jsx-a11y@6.9.0(eslint@9.6.0))(eslint-plugin-react-hooks@4.6.2(eslint@9.6.0))(eslint-plugin-react@7.34.3(eslint@9.6.0))(eslint@9.6.0):
+    dependencies:
+      eslint: 9.6.0
+      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.16.0(eslint@9.6.0)(typescript@5.5.3))(eslint@9.6.0))(eslint@9.6.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.16.0(eslint@9.6.0)(typescript@5.5.3))(eslint@9.6.0)
+      eslint-plugin-jsx-a11y: 6.9.0(eslint@9.6.0)
+      eslint-plugin-react: 7.34.3(eslint@9.6.0)
+      eslint-plugin-react-hooks: 4.6.2(eslint@9.6.0)
+      object.assign: 4.1.5
+      object.entries: 1.1.8
+
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   eslint-formatter-stylish@8.40.0:
     dependencies:
       chalk: 4.1.2
@@ -4922,6 +4977,9 @@ snapshots:
       text-table: 0.2.0
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   eslint-import-resolver-node@0.3.9:
     dependencies:
       debug: 3.2.7
@@ -4930,10 +4988,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   eslint-loader@4.0.2(eslint@8.57.0)(webpack@5.92.1(webpack-cli@5.1.4)):
     dependencies:
       eslint: 8.57.0
 =======
+=======
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   eslint-loader@4.0.2(eslint@9.6.0)(webpack@5.92.1(webpack-cli@5.1.4)):
     dependencies:
       eslint: 9.6.0
@@ -4946,17 +5007,30 @@ snapshots:
       webpack: 5.92.1(webpack-cli@5.1.4)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   eslint-module-utils@2.8.1(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint@8.57.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 7.16.0(eslint@8.57.0)(typescript@5.5.3)
       eslint: 8.57.0
+=======
+  eslint-module-utils@2.8.1(@typescript-eslint/parser@7.16.0(eslint@9.6.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint@9.6.0):
+    dependencies:
+      debug: 3.2.7
+    optionalDependencies:
+      '@typescript-eslint/parser': 7.16.0(eslint@9.6.0)(typescript@5.5.3)
+      eslint: 9.6.0
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
       eslint-import-resolver-node: 0.3.9
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0):
+=======
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.16.0(eslint@9.6.0)(typescript@5.5.3))(eslint@9.6.0):
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5
@@ -4964,9 +5038,15 @@ snapshots:
       array.prototype.flatmap: 1.3.2
       debug: 3.2.7
       doctrine: 2.1.0
+<<<<<<< HEAD
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
       eslint-module-utils: 2.8.1(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint@8.57.0)
+=======
+      eslint: 9.6.0
+      eslint-import-resolver-node: 0.3.9
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@7.16.0(eslint@9.6.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint@9.6.0)
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
       hasown: 2.0.2
       is-core-module: 2.14.0
       is-glob: 4.0.3
@@ -4977,14 +5057,21 @@ snapshots:
       semver: 6.3.1
       tsconfig-paths: 3.15.0
     optionalDependencies:
+<<<<<<< HEAD
       '@typescript-eslint/parser': 7.16.0(eslint@8.57.0)(typescript@5.5.3)
+=======
+      '@typescript-eslint/parser': 7.16.0(eslint@9.6.0)(typescript@5.5.3)
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
     transitivePeerDependencies:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
       - supports-color
 
+<<<<<<< HEAD
   eslint-plugin-jsx-a11y@6.9.0(eslint@8.57.0):
 =======
+=======
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
   eslint-plugin-jsx-a11y@6.9.0(eslint@9.6.0):
 >>>>>>> a0a5a1f8 (Update code to try and fix getResults command)
     dependencies:
@@ -5006,11 +5093,19 @@ snapshots:
       safe-regex-test: 1.0.3
       string.prototype.includes: 2.0.0
 
+<<<<<<< HEAD
   eslint-plugin-react-hooks@4.6.2(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
 
   eslint-plugin-react@7.34.3(eslint@8.57.0):
+=======
+  eslint-plugin-react-hooks@4.6.2(eslint@9.6.0):
+    dependencies:
+      eslint: 9.6.0
+
+  eslint-plugin-react@7.34.3(eslint@9.6.0):
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlast: 1.2.5
@@ -5019,7 +5114,11 @@ snapshots:
       array.prototype.tosorted: 1.1.4
       doctrine: 2.1.0
       es-iterator-helpers: 1.0.19
+<<<<<<< HEAD
       eslint: 8.57.0
+=======
+      eslint: 9.6.0
+>>>>>>> 23b55c4d (Try new things to get formatter to give result object)
       estraverse: 5.3.0
       jsx-ast-utils: 3.3.5
       minimatch: 3.1.2

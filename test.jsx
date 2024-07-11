@@ -17,6 +17,7 @@ function TestComponent({ title, onClick }) {
         <input type="text" id="name" />
       </form>
       {/* Using <h1> for non-top-level heading */}
+      <h2>Test</h2>
       <h1>Subheading</h1>
       {/* Non-interactive element assigned an interactive role */}
       <span role="button" onClick={onClick}>Interactive span</span>

@@ -67,11 +67,7 @@ export async function eslintCheck() {
     const doc = editor.document;
     const results: ESLint.LintResult[] = await runESLint(doc);
 
-<<<<<<< HEAD
     
-=======
-    // Format results manually or use a custom formatter function
->>>>>>> a0a5a1f8 (Update code to try and fix getResults command)
     const formattedResults = results.map(result => ({
       filePath: result.filePath,
       messages: result.messages.map(msg => `${msg.line}:${msg.column} ${msg.message} (${msg.ruleId})`).join('\n'),

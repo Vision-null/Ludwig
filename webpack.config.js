@@ -40,10 +40,7 @@ const config = {
       },
     ],
   },
-<<<<<<< HEAD
   devtool: 'nosources-source-map',
-=======
->>>>>>> a0a5a1f8 (Update code to try and fix getResults command)
   plugins: [
     new CleanWebpackPlugin(),
     new ESLintPlugin({
