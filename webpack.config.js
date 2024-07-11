@@ -111,3 +111,4 @@ const reactConfig = {
 };
 
 module.exports = [config, reactConfig];
+

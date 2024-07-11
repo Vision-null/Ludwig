@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { ESLint } from 'eslint';
+import console from 'console';
 import { registerScanAllDocsCommand } from './commands/scanAllDocsCommand';
 import { registerScanDocCommand } from './commands/scanDocCommand';
 import { registerHighlightElementsCommand, registerToggleOffCommand } from './commands/highlightElementsCommand';
@@ -163,12 +164,17 @@ export function activate(context: vscode.ExtensionContext) {
   // Register the getResults command
   registerGetResultsCommand(context);
 
+  // Register the getResults command
+  registerGetResultsCommand(context);
+
   context.subscriptions.push(sidebarWebviewDisposable);
 }
 
 export function deactivate() {
   vscode.window.showInformationMessage('Goodbye');
 }
+
+
 
 
 
