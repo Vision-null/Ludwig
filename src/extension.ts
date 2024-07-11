@@ -4,6 +4,9 @@ import { ESLint } from 'eslint';
 import console from 'console';
 import { registerScanAllDocsCommand } from './commands/scanAllDocsCommand';
 import { registerScanDocCommand } from './commands/scanDocCommand';
+import { registerHighlightElementsCommand, registerToggleOffCommand } from './commands/highlightElementsCommand';
+import { registerDocumentEvents } from './commands/documentEvents';
+import { registerHoverProvider } from './commands/hoverProvider';
 import { SidebarWebviewProvider } from './views/SidebarWebviewProvider';
 
 // Define a DiagnosticCollection to store linting results
@@ -140,7 +143,7 @@ function registerGetResultsCommand(context: vscode.ExtensionContext) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Congratulations, your extension "Ludwig" is now active!');
+  console.log('Congratulations, your extension "ludwig" is now active!');
 
   const primarySidebarWebview = new SidebarWebviewProvider(context.extensionUri);
   const sidebarWebviewDisposable = vscode.window.registerWebviewViewProvider(
@@ -149,6 +152,10 @@ export function activate(context: vscode.ExtensionContext) {
   );
   registerScanDocCommand(context);
   registerScanAllDocsCommand(context);
+  //   registerHighlightElementsCommand(context);
+  //   registerToggleOffCommand(context);
+  //   registerDocumentEvents(context);
+  //   registerHoverProvider(context);
 
   // Register the getResults command
   registerGetResultsCommand(context);

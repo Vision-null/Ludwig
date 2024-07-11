@@ -5,6 +5,10 @@
     "lib": ["es2020", "dom"],
     "jsx": "react",
     "rootDir": "src",
+    "baseUrl": "src",
+    "paths": {
+      "logic/*": ["logic/*"]
+    },
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -12,6 +16,6 @@
     "moduleResolution": "node",
     "resolveJsonModule": true
   },
-  "include": ["src", ".eslintrc.accessibility.json"], 
+  "include": ["src/**/*", "declarations.d.ts", ".eslintrc.accessibility.json"],
   "exclude": ["node_modules", "dist"]
 }

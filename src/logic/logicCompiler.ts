@@ -1,9 +1,15 @@
-const mariacheck = require('./maria-standard/allTheMarias');
+import * as Critical from './aria-standards/critical';
+import * as vscode from 'vscode';
 const { JSDOM } = require('jsdom');
 let body: any, document: any;
 
-export function generateBody(source: any) {
-  const htmlCode = source.document.getText();
+export interface AriaRecommendations {
+  [key: string]: any;
+  totalElements: number;
+}
+
+export function cloneDomFromSource(source: any) {
+  const htmlCode = addLineNumbersToHtml(source.document.getText());
   const { window } = new JSDOM(htmlCode, {
     url: 'http://ciafund.gov',
     pretendToBeVisual: true,
@@ -13,34 +19,65 @@ export function generateBody(source: any) {
   body = window.document.body;
 }
 
-export function getDocument() {
-  return document;
-}
-
-export async function compileLogic(activeEditor: any) {
-  const ariaRecommendations: AriaRecommendations = {};
-  generateBody(activeEditor);
-
+export async function compileLogic(activeEditor: vscode.TextEditor) {
+  const ariaRecommendations: AriaRecommendations = {
+    totalElements: 0,
+  };
+  cloneDomFromSource(activeEditor);
   function tag(element: any) {
-    return document.querySelectorAll(element);
+    return body.querySelectorAll(element);
   }
-  mariacheck.inputButtonText(tag('input'), ariaRecommendations);
-  mariacheck.evalAnchors(tag('a'), ariaRecommendations);
-  // mariacheck.AreaMapAltText(tag('alt'));
-  // mariacheck.AriaHidden(tag('*'), ariaRecommendations);
-  // mariacheck.buttonText(tag('button'));
-  // mariacheck.uniqueIds(tag('***'), ariaRecommendations);
-  // mariacheck.imgAltText(tag('***'), ariaRecommendations);
-  // mariacheck.metaHttpRefresh(tag('***'), ariaRecommendations);
-  // mariacheck.metaViewportTextResize(tag('***'), ariaRecommendations);
-  // mariacheck.selectName(tag('***'), ariaRecommendations);
-  // mariacheck.videoCaptions(tag('***'), ariaRecommendations);
-  // mariacheck.labels(tag('input, ***, textarea'), ariaRecommendations);
-  // mariacheck.ariaRoles(tag('***'), ariaRecommendations);
-  // console.log(ariaRecommendations);
+
+  ariaRecommendations.anchorLabel = Critical.anchorLabelCheck(tag('a'));
+  // I changed functionality for this one and the next, but not the rest
+
+  ariaRecommendations.areaAltText = Critical.areaAltTextCheck(tag('area'));
+
+  ariaRecommendations.ariaHidden = Critical.ariaHiddenCheck(tag('*'));
+
+  ariaRecommendations.discernibleButtonText = Critical.discernibleButtonTextCheck(tag('button'));
+
+  ariaRecommendations.uniqueIDs = Critical.uniqueIDsCheck(tag('[id]'));
+
+  ariaRecommendations.imageAlts = Critical.imageAltsCheck(tag('img'));
+
+  ariaRecommendations.inputButton = Critical.inputButtonCheck(tag('input'));
+
+  ariaRecommendations.metaEquivRefresh = Critical.metaEquivRefreshCheck(tag('meta'));
+
+  ariaRecommendations.metaViewport = Critical.metaViewportCheck(tag('meta[name="viewport"]'));
+
+  ariaRecommendations.selectHasAccessName = Critical.selectHasAccessNameCheck(tag('select'));
+
+  ariaRecommendations.videoCaptions = Critical.videoCaptionsCheck(tag('video'));
+
+  ariaRecommendations.formsHaveLabels = Critical.formsHaveLabelsCheck(tag('form'));
+
+  // I'M HOLDING OFF ON THIS ONE FOR NOW - Spencer 7/4/24
+  // // role-support-aria-attribute
+  // const roleSupportHtml = checkAriaRoles();
+
+  // roleSupportHtml.forEach((element: string[], index: number) => {
+  //     ariaRecommendations[element[2]] = [{link: element[1], desc: 'Please select "Read More" below to see documentation for this error.'}, element[0]];
+  // });
+
+  for (const key in ariaRecommendations) {
+    if (Array.isArray(ariaRecommendations[key]) && ariaRecommendations[key].length === 0) {
+      delete ariaRecommendations[key];
+    }
+  }
+
+  ariaRecommendations.totalElements = body.querySelectorAll('*').length;
+  // the reason for saving the total number of elements in the document now is because this is the only place in the code where we create the JSDOM
+  // totalElements will be used in the react dashboard to calculate the percentage of elements that are accessible
+
   return ariaRecommendations;
 }
 
-export interface AriaRecommendations {
-  [key: string]: any;
+function addLineNumbersToHtml(htmlCode: string) {
+  const lines = htmlCode.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    lines[i] += `<!-- html line number: ${i + 1} -->`;
+  }
+  return lines.join('\n');
 }

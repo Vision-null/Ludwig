@@ -1,7 +1,7 @@
 import React, { useMemo, memo } from 'react';
 import { PieChart } from 'react-minimal-pie-chart';
 
-function Bar({ recommendations }) {
+function Pie({ recommendations }) {
   const data = recommendations.recData;
 
   const pieSize = 300;
@@ -20,6 +20,9 @@ function Bar({ recommendations }) {
       );
       return `${percentage}%`;
     }
+
+    console.log('Chart Data:', chartData);
+console.log('Center Text:', centerText);
     return '';
   }, [data]);
 
@@ -80,4 +83,4 @@ function Bar({ recommendations }) {
   );
 }
 
-export default memo(Bar);
+export default memo(Pie);
