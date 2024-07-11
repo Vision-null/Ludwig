@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { ESLint } from 'eslint';
-import console from 'console';
 import { registerScanAllDocsCommand } from './commands/scanAllDocsCommand';
 import { registerScanDocCommand } from './commands/scanDocCommand';
 import { registerHighlightElementsCommand, registerToggleOffCommand } from './commands/highlightElementsCommand';
