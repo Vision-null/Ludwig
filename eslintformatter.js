@@ -46,7 +46,7 @@ module.exports = function (results, context) {
   //   });
   // };
 
-  extractFile();
+  // extractFile();
 
   const summary = results.reduce(
     (seq, current) => {
