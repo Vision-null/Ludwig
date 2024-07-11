@@ -5,10 +5,13 @@
     "lib": ["es2020", "dom"],
     "jsx": "react",
     "rootDir": "src",
+<<<<<<< HEAD
     "baseUrl": "src",
     "paths": {
       "logic/*": ["logic/*"]
     },
+=======
+>>>>>>> a0a5a1f8 (Update code to try and fix getResults command)
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -16,7 +19,11 @@
     "moduleResolution": "node",
     "resolveJsonModule": true
   },
+<<<<<<< HEAD
   "include": ["src/**/*", "declarations.d.ts", ".eslintrc.accessibility.json"],
+=======
+  "include": ["src", ".eslintrc.accessibility.json"], 
+>>>>>>> a0a5a1f8 (Update code to try and fix getResults command)
   "exclude": ["node_modules", "dist"]
 }
 
