@@ -22,11 +22,7 @@ const config = {
       {
         test: /\.ts$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'ts-loader',
-          },
-        ],
+        use: 'ts-loader',
       },
       {
         test: /\.(js|jsx)$/,
@@ -40,9 +36,11 @@ const config = {
       },
     ],
   },
-  devtool: 'nosources-source-map',
+  devtool: 'source-map', // Ensure source maps are generated
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*', '!dashboard.js', '!dashboard.js.map'],
+    }),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
       overrideConfigFile: path.resolve(__dirname, '.eslintrc.accessibility.json'),
@@ -60,7 +58,6 @@ const config = {
       message: /Critical dependency/,
     },
   ],
-  // devtool: 'nosources-source-map',
   infrastructureLogging: {
     level: 'log',
   },
@@ -95,8 +92,11 @@ const reactConfig = {
       },
     ],
   },
+  devtool: 'source-map', // Ensure source maps are generated
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*', '!extension.js', '!extension.js.map'],
+    }),
   ],
   ignoreWarnings: [
     {
@@ -108,7 +108,6 @@ const reactConfig = {
       message: /Critical dependency/,
     },
   ],
-  // devtool: 'source-map',
 };
 
 module.exports = [config, reactConfig];

@@ -64,6 +64,8 @@
     "url": "https://github.com/vision-null/Ludwig"
   },
   "scripts": {
+    "build-extension": "webpack --config webpack.config.js --env target=extension",
+    "build-dashboard": "webpack --config webpack.config.js --env target=dashboard",
     "vscode:prepublish": "pnpm run package",
     "compile": "webpack",
     "watch": "webpack --watch",
