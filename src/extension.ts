@@ -23,6 +23,10 @@ interface LintMessage {
 //   filePath: string;
 //   messages: LintMessage[];
 // }
+// interface LintResult {
+//   filePath: string;
+//   messages: LintMessage[];
+// }
 
 // Function to run ESLint on the current document
 export async function runESLint(document: vscode.TextDocument): Promise<ESLint.LintResult[]> {
@@ -66,7 +70,7 @@ export async function eslintCheck() {
     const doc = editor.document;
     const results: ESLint.LintResult[] = await runESLint(doc);
 
-    
+    // Format results manually or use a custom formatter function
     const formattedResults = results.map(result => ({
       filePath: result.filePath,
       messages: result.messages.map(msg => `${msg.line}:${msg.column} ${msg.message} (${msg.ruleId})`).join('\n'),
