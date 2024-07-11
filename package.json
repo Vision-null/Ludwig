@@ -73,9 +73,9 @@
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint . -c {.js,.jsx,.ts,.tsx}",
     "test": "vscode-test",
-    "useLint": "eslint -f ./eslintformatter.js test.jsx"
+    "useLint": "eslint -f ./eslintformatter.js  --config eslint.config.js 'src/**/*.{js,jsx}'"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
@@ -107,8 +107,6 @@
   },
   "dependencies": {
     "bufferutil": "^4.0.8",
-    "eslint": "9.6.0",
-    "eslint-config-airbnb": "^19.0.4",
     "jsdom": "^24.1.0",
     "peerdeps": "^1.1.1",
     "react": "^18.3.1",
