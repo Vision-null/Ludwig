@@ -20,17 +20,20 @@ interface LintMessage {
   column: number;
 }
 
-interface LintResult {
-  filePath: string;
-  messages: LintMessage[];
-}
+// interface LintResult {
+//   filePath: string;
+//   messages: LintMessage[];
+// }
 
 // Function to run ESLint on the current document
 export async function runESLint(document: vscode.TextDocument): Promise<ESLint.LintResult[]> {
+  const eslintConfigPath = path.resolve(__dirname, '..', '.eslintrc.accessibility.json');
+  console.log(`ESLint config path: ${eslintConfigPath}`);
+  
   const eslint = new ESLint({
-    overrideConfigFile: path.resolve(__dirname, '..', '.eslintrc.accessibility.json'),
-    useEslintrc: false,
+    overrideConfigFile: eslintConfigPath,
   });
+  
   const text = document.getText();
   const results = await eslint.lintText(text, {
     filePath: document.fileName,
@@ -58,17 +61,24 @@ export async function runESLint(document: vscode.TextDocument): Promise<ESLint.L
   }));
 }
 
-// Function to check the document using ESLint and format the results
 export async function eslintCheck() {
   const editor = vscode.window.activeTextEditor;
   if (editor) {
     const doc = editor.document;
     const results: ESLint.LintResult[] = await runESLint(doc);
 
-    const eslint = new ESLint();
-    const formatCode = await eslint.loadFormatter('json');
-    const resultText = formatCode.format(results);
-    console.log(resultText);
+    // Format results manually or use a custom formatter function
+    const formattedResults = results.map(result => ({
+      filePath: result.filePath,
+      messages: result.messages.map(msg => `${msg.line}:${msg.column} ${msg.message} (${msg.ruleId})`).join('\n'),
+      errorCount: result.errorCount,
+      warningCount: result.warningCount
+    }));
+
+    formattedResults.forEach(result => {
+      console.log(`File: ${result.filePath}\nErrors: ${result.errorCount}\nWarnings: ${result.warningCount}\nMessages:\n${result.messages}`);
+    });
+
     return { document: doc, results };
   }
   return null;
@@ -135,6 +145,7 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() {
   vscode.window.showInformationMessage('Goodbye');
 }
+
 
 
 //

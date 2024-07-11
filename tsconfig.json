@@ -1,18 +1,22 @@
 {
   "compilerOptions": {
-    "module": "Node16",
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "sourceMap": true,
+    "module": "commonjs",
+    "target": "es2020",
+    "lib": ["es2020", "dom"],
+    "jsx": "react",
     "rootDir": "src",
     "baseUrl": "src",
     "paths": {
       "logic/*": ["logic/*"]
     },
-    "strict": true
-    // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
-    // "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
-    // "noUnusedParameters": true,  /* Report errors on unused parameters. */
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*", "declarations.d.ts"]
+  "include": ["src/**/*", "declarations.d.ts", ".eslintrc.accessibility.json"],
+  "exclude": ["node_modules", "dist"]
 }
+
