@@ -1,69 +1,71 @@
-<p align="center"><img src="./assets/Ludwing-Logo-Detailed.png" width='200' style="margin-top: 10px; margin-bottom: 15px;"></p>
+# eslint-test README
 
-# Ludwig VS
+This is the README for your extension "eslint-test". After writing up a brief description, we recommend including the following sections.
 
-Ludwig VS is a VS Code linter that makes writing accessible HTML easier for developers. Ludwig offers in-line highlighting of HTML that is not in compliance with WCAG and WAI-ARIA standards and provides recommendations to enhance the accessibility of your HTML code.
+## Features
 
-One sixth of the world’s population will experience a disability at some point in their lifetime, but 98% of websites contain inaccessibility issues, making them challenging for individuals with disabilities to use. Ludwig tackles this problem directly by providing a reliable tool that developers can leverage during the development process, rather than relying solely on post-development accessibility testing. Ludwig highlights HTML accessibility errors in real-time, such as missing ARIA-attributes or empty tags. When a developer hovers over the highlighted code, a hover message will display the root issue and provide further documentation for reference. Additionally, the Ludwig dashboard panel offers a comprehensive overview of the errors in a developer’s HTML and provides a custom accessibility score for the developer to gauge and improve their web content’s accessibility.
+Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
 
-Ludwig tests HTML for over 85 of the most critical and common accessibility guidelines outlined by WAI-ARIA. We still plan on expanding Ludwig’s capabilities to provide coverage for all guidelines as well as by providing testing for JSX. If you or someone you know would like to contribute to Ludwig, please contact us!
+For example if there is an image subfolder under your extension project workspace:
 
-Visit the [Ludwig](https://www.ludwigvs.com) website to learn more.
+\!\[feature X\]\(images/feature-x.png\)
 
-# Set-Up
+> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
-Download Ludwig VS from the VS Code extensions marketplace.
+## Requirements
 
-To start a Ludwig session, open the command palette and type <b>> Ludwig: Compose</b>. This will activate Ludwig, display highlights on any existing non-compliant HTML, and offer new highlights and feedback as you write.
+If you have any requirements or dependencies, add a section describing those and how to install and configure them.
 
-To take a break and deactivate the extension, type <b>> Ludwig: Caesura</b> into the command line. This will terminate the current session and deactivate highlighting and recommendations.
+## Extension Settings
 
-<p align="center"><img src="./assets/ludwig-compose-caesura.gif" width='600' style="margin-top: 1em; margin-bottom: 1em;"></p>
+Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
 
-To scan your document and generate your accessibility score, press the Ludwig logo on the activity bar (sidebar to the left), then press "Scan Document."
+For example:
 
-<p align="center"><img src="./assets/ludwig-scan-interface.gif" width='600' style="margin-top: 1em; margin-bottom: 1em;"></p>
+This extension contributes the following settings:
 
-# User Best Practices
+* `myExtension.enable`: Enable/disable this extension.
+* `myExtension.thing`: Set to `blah` to do something.
 
-Please note that Ludwig is currently in Beta and functions best when used with proper HTML formatting. Therefore, to ensure proper formatting, please use a well-established linting tool such as [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
+## Known Issues
 
-# Open Source Work
+Calling out known issues can help limit users opening duplicate issues against your extension.
 
-| Feature / Bug                                      | Status      |
-| -------------------------------------------------- | ----------- |
-| Fix inconsistent highlights on parent elements     | In Progress |
-| Expand coverage to JSX                             | To-Do       |
-| Expand coverage to non-serious/critical guidelines | To-Do       |
+## Release Notes
 
-# Contributors
+Users appreciate release notes as you update your extension.
 
-Connie Johnson | [LinkedIn](https://www.linkedin.com/in/connie-johnson-7a33152a4) <br>
-Jake Johnson | [LinkedIn](https://www.linkedin.com/in/jake527/) <br>
-Prashay Mehta | [LinkedIn](https://www.linkedin.com/in/prashaymehta/) <br>
-Harold Reeves | [LinkedIn](https://www.linkedin.com/in/haroldreeves/) <br>
-Tyler Spicer | [LinkedIn](https://www.linkedin.com/in/tyler-e-spicer/) <br>
+### 1.0.0
 
-# Licensing Info
+Initial release of ...
 
-MIT License
+### 1.0.1
 
-Copyright (c) 2023 OSLabs Beta
+Fixed issue #.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+### 1.1.0
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Added features X, Y, and Z.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+---
+
+## Following extension guidelines
+
+Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+
+* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+
+## Working with Markdown
+
+You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+
+* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
+* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
+* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+
+## For more information
+
+* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
+* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+
+**Enjoy!**

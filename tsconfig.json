@@ -1,22 +1,16 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2020",
-    "lib": ["es2020", "dom"],
-    "jsx": "react",
+    "module": "Node16",
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM" // Add this if you're working with browser APIs
+    ],
+    "sourceMap": true,
     "rootDir": "src",
-    "baseUrl": "src",
-    "paths": {
-      "logic/*": ["logic/*"]
-    },
     "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true
+    "esModuleInterop": true, // Add this for better module compatibility
+    "resolveJsonModule": true // Add this if you import JSON files
   },
-  "include": ["src/**/*", "declarations.d.ts", ".eslintrc.accessibility.json"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"]
 }
-
