@@ -32,38 +32,38 @@ interface LintMessage {
 export async function runESLint(document: vscode.TextDocument): Promise<ESLint.LintResult[]> {
   const eslintConfigPath = path.resolve(__dirname, '..', '.eslintrc.accessibility.json');
   console.log(`ESLint config path: ${eslintConfigPath}`);
-  
+
   const eslint = new ESLint({
     overrideConfigFile: eslintConfigPath,
   });
-  
+
   const text = document.getText();
   const results = await eslint.lintText(text, {
     filePath: document.fileName,
   });
 
-  console.log("results: ", results);
+  console.log('results: ', results);
 
-
-
-  console.log(results.map((result) => ({
-    filePath: result.filePath,
-    messages: result.messages.map((message) => ({
-      ruleId: message.ruleId,
-      message: message.message,
-      severity: message.severity,
-      line: message.line,
-      column: message.column,
-    })),
-    suppressedMessages: [],
-    errorCount: result.errorCount,
-    warningCount: result.warningCount,
-    fixableErrorCount: result.fixableErrorCount,
-    fixableWarningCount: result.fixableWarningCount,
-    source: result.source,
-    usedDeprecatedRules: result.usedDeprecatedRules,
-    fatalErrorCount: result.fatalErrorCount,
-  })));
+  console.log(
+    results.map((result) => ({
+      filePath: result.filePath,
+      messages: result.messages.map((message) => ({
+        ruleId: message.ruleId,
+        message: message.message,
+        severity: message.severity,
+        line: message.line,
+        column: message.column,
+      })),
+      suppressedMessages: [],
+      errorCount: result.errorCount,
+      warningCount: result.warningCount,
+      fixableErrorCount: result.fixableErrorCount,
+      fixableWarningCount: result.fixableWarningCount,
+      source: result.source,
+      usedDeprecatedRules: result.usedDeprecatedRules,
+      fatalErrorCount: result.fatalErrorCount,
+    }))
+  );
   return results.map((result) => ({
     filePath: result.filePath,
     messages: result.messages.map((message) => ({
@@ -91,15 +91,17 @@ export async function eslintCheck() {
     const results: ESLint.LintResult[] = await runESLint(doc);
 
     // Format results manually or use a custom formatter function
-    const formattedResults = results.map(result => ({
+    const formattedResults = results.map((result) => ({
       filePath: result.filePath,
-      messages: result.messages.map(msg => `${msg.line}:${msg.column} ${msg.message} (${msg.ruleId})`).join('\n'),
+      messages: result.messages.map((msg) => `${msg.line}:${msg.column} ${msg.message} (${msg.ruleId})`).join('\n'),
       errorCount: result.errorCount,
-      warningCount: result.warningCount
+      warningCount: result.warningCount,
     }));
 
-    formattedResults.forEach(result => {
-      console.log(`File: ${result.filePath}\nErrors: ${result.errorCount}\nWarnings: ${result.warningCount}\nMessages:\n${result.messages}`);
+    formattedResults.forEach((result) => {
+      console.log(
+        `File: ${result.filePath}\nErrors: ${result.errorCount}\nWarnings: ${result.warningCount}\nMessages:\n${result.messages}`
+      );
     });
 
     return { document: doc, results };
@@ -118,15 +120,15 @@ function registerGetResultsCommand(context: vscode.ExtensionContext) {
       result.messages.forEach((msg) => {
         const range = new vscode.Range(
           new vscode.Position(msg.line - 1, msg.column - 1),
-          new vscode.Position(msg.line - 1, msg.column - 1),
+          new vscode.Position(msg.line - 1, msg.column - 1)
         );
         const diagnostic = new vscode.Diagnostic(
           range,
           msg.message,
-          msg.severity === 2 ? vscode.DiagnosticSeverity.Error : vscode.DiagnosticSeverity.Warning,
+          msg.severity === 2 ? vscode.DiagnosticSeverity.Error : vscode.DiagnosticSeverity.Warning
         );
         diagnostics.push(diagnostic);
-        console.log("diagnostics: ", diagnostics);
+        console.log('diagnostics: ', diagnostics);
       });
     });
 
@@ -159,11 +161,6 @@ export function activate(context: vscode.ExtensionContext) {
   //   registerToggleOffCommand(context);
   //   registerDocumentEvents(context);
   //   registerHoverProvider(context);
-
-  // Register the getResults command
-  registerGetResultsCommand(context);
-
-  // Register the getResults command
   registerGetResultsCommand(context);
 
   context.subscriptions.push(sidebarWebviewDisposable);
@@ -172,10 +169,6 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() {
   vscode.window.showInformationMessage('Goodbye');
 }
-
-
-
-
 
 //
 //
