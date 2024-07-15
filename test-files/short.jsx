@@ -11,11 +11,7 @@ function ShortTest() {
       >
         Click me
       </div>
-      
-      sing onClick handler on clickable div */}
-      
-        />
-      sing key events on clickable element */}
+      sing onClick handler on clickable div */ sing key events on clickable element */
       <div onClick={onClick} />
       {/* Heading with no content */}
       <h2 />
@@ -32,8 +28,6 @@ function ShortTest() {
       <a href="https://example.com" />
       {/* Label missing associated control */}
       <label>Missing control</label>
-      
-      
       <a href="#">Empty link</a>
       <a href="#">Empty link</a>
       <a href="#">Empty link</a>
