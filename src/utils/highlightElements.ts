@@ -14,12 +14,13 @@ const decorationType = vscode.window.createTextEditorDecorationType({
 // {line number as string : array of aria-object keys}
 const recsByLineNumber: { [key: string]: string[] } = {};
 
-export function highlightElements(document: vscode.TextDocument) {
+export async function highlightElements(document: vscode.TextDocument) {
   const activeEditor = vscode.window.activeTextEditor;
 
   if (activeEditor) {
     // invoke compileLogic to get object with ARIA recommendations
-    const ariaRecommendations = compileLogic(activeEditor);
+    const ariaRecommendations = await compileLogic(activeEditor);
+    console.log('ariaRecommendations: ', ariaRecommendations);
 
     // populate recsByLineNumber
     for (const [ariaObjKey, recsArrays] of Object.entries(ariaRecommendations)) {
@@ -36,6 +37,7 @@ export function highlightElements(document: vscode.TextDocument) {
         }
       }
     }
+    console.log('recsByLineNumber: ', recsByLineNumber);
 
     // create array of ranges to highlight
     const highlightedRanges: vscode.Range[] = [];

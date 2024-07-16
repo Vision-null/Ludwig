@@ -4,6 +4,8 @@ import { registerScanAllDocsCommand } from './commands/scanAllDocsCommand';
 import { registerScanDocCommand } from './commands/scanDocCommand';
 // import { SidebarWebviewProvider } from './views/SidebarWebviewProvider';
 import { DashboardWebviewProvider } from './views/DashboardWebviewProvider';
+import { registerHighlightElementsCommand, registerToggleOffCommand  } from './commands/highlightElementsCommand';
+import { registerHoverProvider } from './commands/hoverProvider';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "ludwig" is now active!');
@@ -42,6 +44,12 @@ export function activate(context: vscode.ExtensionContext) {
   registerScanDocCommand(context);
   registerScanAllDocsCommand(context);
   initializeEslintDiagnostics(context, dashboardWebviewProvider);
+  registerHighlightElementsCommand(context);
+  registerToggleOffCommand(context);
+  //   registerDocumentEvents(context);
+  registerHoverProvider(context);
+
+  // context.subscriptions.push(sidebarWebviewDisposable);
 }
 
 export function deactivate() {
