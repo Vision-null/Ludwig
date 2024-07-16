@@ -18,10 +18,10 @@ export function activate(context: vscode.ExtensionContext) {
   registerScanDocCommand(context);
   registerScanAllDocsCommand(context);
   initializeEslintDiagnostics(context);
-  //   registerHighlightElementsCommand(context);
-  //   registerToggleOffCommand(context);
+  registerHighlightElementsCommand(context);
+  registerToggleOffCommand(context);
   //   registerDocumentEvents(context);
-  //   registerHoverProvider(context);
+  registerHoverProvider(context);
 
   context.subscriptions.push(sidebarWebviewDisposable);
 }

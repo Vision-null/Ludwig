@@ -35,6 +35,14 @@
       {
         "command": "ludwig.clearDiagnostics",
         "title": "Ludwig: Clear ESLint Results"
+      },
+      {
+        "command": "ludwig.highlightElements",
+        "title": "Ludwig: Highlight HTML"
+      },
+      {
+        "command": "ludwig.toggleOff",
+        "title": "Ludwig: Highlight HTML - **OFF**"
       }
     ],
     "viewsContainers": {
