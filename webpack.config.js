@@ -1,4 +1,6 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 const path = require('path');
 
 const config = {
@@ -19,10 +21,7 @@ const config = {
   resolve: {
     extensions: ['.ts', '.js'],
     alias: {
-      'eslint-plugin-jsx-a11y': path.resolve(
-        __dirname,
-        'node_modules/eslint-plugin-jsx-a11y'
-      ),
+      'eslint-plugin-jsx-a11y': path.resolve(__dirname, 'node_modules/eslint-plugin-jsx-a11y'),
     },
   },
   module: {
@@ -49,6 +48,16 @@ const config = {
     ],
   },
   devtool: 'nosources-source-map',
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/eslint/configs'),
+          to: path.resolve(__dirname, 'dist/eslint/configs'),
+        },
+      ],
+    }),
+  ],
   infrastructureLogging: {
     level: 'log',
   },
@@ -73,11 +82,7 @@ const reactConfig = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [
-              '@babel/preset-env',
-              '@babel/preset-react',
-              '@babel/preset-typescript',
-            ],
+            presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
           },
         },
       },

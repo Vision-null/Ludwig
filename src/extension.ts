@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { initializeEslintDiagnostics } from './eslint/eslintDiagnostics';
+import { initializeLinting } from './eslint/eslintDiagnostics';
 import { registerScanAllDocsCommand } from './commands/scanAllDocsCommand';
 import { registerScanDocCommand } from './commands/scanDocCommand';
 import { registerHighlightElementsCommand, registerToggleOffCommand } from './commands/highlightElementsCommand';
@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
   registerScanDocCommand(context);
   registerScanAllDocsCommand(context);
-  initializeEslintDiagnostics(context);
+  initializeLinting(context);
   //   registerHighlightElementsCommand(context);
   //   registerToggleOffCommand(context);
   //   registerDocumentEvents(context);
