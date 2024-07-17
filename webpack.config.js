@@ -4,9 +4,9 @@ const path = require('path');
 const config = {
   target: 'node',
   mode: 'none',
-  entry: './src/extension.ts',
+  entry: './src/extension.ts',  // This should point to your main TypeScript entry file
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist/eslint'),
     filename: 'extension.js',
     libraryTarget: 'commonjs2',
   },
@@ -49,18 +49,21 @@ const config = {
     ],
   },
   devtool: 'nosources-source-map',
+  plugins: [
+    new CleanWebpackPlugin(),
+  ],
   infrastructureLogging: {
-    level: 'log',
+    level: 'verbose',
   },
 };
 
 const reactConfig = {
   target: 'web',
   mode: 'development',
-  entry: './src/react-views/dashboard/index.js',
+  entry: './src/react-views/dashboard/components/dashboard.js',  // Updated entry point
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'dashboard.js',
+    path: path.resolve(__dirname, 'dist/dashboard'),
+    filename: 'dashboard.js',  // Updated output filename
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],

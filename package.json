@@ -17,9 +17,13 @@
     "onLanguage:javascriptreact",
     "onLanguage:typescriptreact"
   ],
-  "main": "./dist/extension.js",
+  "main": "./dist/eslint/extension.js",
   "contributes": {
     "commands": [
+      {
+        "command": "ludwig.showDashboard",
+        "title": "Ludwig: Show Dashboard"
+      },
       {
         "command": "ludwig.scanDoc",
         "title": "Scan Document"
@@ -95,6 +99,7 @@
     "@typescript-eslint/eslint-plugin": "^7.16.0",
     "@typescript-eslint/parser": "^7.16.0",
     "bufferutil": "^4.0.8",
+    "chart.js": "^4.4.3",
     "eslint": "8.56.0",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "jsdom": "^24.1.0",
