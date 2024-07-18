@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
   //       primarySidebarWebview
   //     )
   // );
-  //     panel.webview.html = primarySidebarWebview.getWebviewContent(panel.webview);
+  //     panel.webview.html = SidebarWebviewProvider.getWebviewContent(panel.webview);
 
   //     // Handle messages from the webview
   //     panel.webview.onDidReceiveMessage((message) => {
