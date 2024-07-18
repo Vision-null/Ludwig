@@ -1,7 +1,20 @@
 import Chart from 'chart.js/auto';
-console.log("Running...");
+
+//prevent too many updates to chart so can only run it after certain amount of time
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
 function createChart() {
-  const ctx = document.getElementById('myChart').getContext('2d');
+  const ctx = document.getElementById('progressionChart').getContext('2d');
   const progressionChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -30,14 +43,25 @@ function createChart() {
 
 let chart = createChart();
 
+const updateChart = debounce((message) => {
+  const timestamp = new Date().toLocaleTimeString();
+  
+  
+  if (chart.data.labels.length >= 100) {
+    chart.data.labels.shift();
+    chart.data.datasets[0].data.shift();
+  }
+  
+  chart.data.labels.push(timestamp);
+  chart.data.datasets[0].data.push(message.errorCount);
+  chart.update();
+}, 500);  
+
 window.addEventListener('message', event => {
   const message = event.data;
   switch (message.command) {
     case 'updateErrors':
-      const timestamp = new Date().toLocaleTimeString();
-      chart.data.labels.push(timestamp);
-      chart.data.datasets[0].data.push(message.errorCount);
-      chart.update();
+      updateChart(message);
       break;
   }
 });

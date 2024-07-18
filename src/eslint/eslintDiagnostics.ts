@@ -1,27 +1,27 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { ESLint } from 'eslint';
-import { SidebarWebviewProvider } from '../views/SidebarWebviewProvider';
+import { DashboardWebviewProvider } from '../views/DashboardWebviewProvider';
 
 let extensionContext: vscode.ExtensionContext;
-let sidebarProvider: SidebarWebviewProvider;
-let diagnosticCollection: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('jsx_eslint');
-let panel: vscode.WebviewPanel | undefined = undefined;
+let dashboardProvider: DashboardWebviewProvider;
+const diagnosticCollection: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('jsx_eslint');
 
-export function initializeEslintDiagnostics(context: vscode.ExtensionContext, sidebarWebviewProvider: SidebarWebviewProvider, webviewPanel?: vscode.WebviewPanel) {
+export function initializeEslintDiagnostics(context: vscode.ExtensionContext, dashboardWebviewProvider: DashboardWebviewProvider) {
   extensionContext = context;
-  sidebarProvider = sidebarWebviewProvider;
-  panel = webviewPanel; // Assign the webview panel to be used later
-  context.subscriptions.push(diagnosticCollection);
+  dashboardProvider = dashboardWebviewProvider;
   registerGetResultsCommand(context);
   registerClearFileDiagnostics(context);
 }
 
-
 export async function runESLint(document: vscode.TextDocument): Promise<ESLint.LintResult[]> {
+  const workspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
+  const userConfig = {};
+
   const eslint = new ESLint({
     useEslintrc: false,
     overrideConfigFile: path.join(extensionContext.extensionPath, 'src/eslint/.eslintrc.accessibility.json'),
+    overrideConfig: userConfig,
     resolvePluginsRelativeTo: extensionContext.extensionPath,
   });
 
@@ -29,6 +29,7 @@ export async function runESLint(document: vscode.TextDocument): Promise<ESLint.L
   const results = await eslint.lintText(text, {
     filePath: document.fileName,
   });
+  console.log(results);
 
   return results;
 }
@@ -48,14 +49,14 @@ export async function setESLintDiagnostics() {
 
     vscode.window.showInformationMessage(message);
 
-    if (panel) {
-      sidebarProvider.updateErrors(panel.webview, numErrors);
+    if (dashboardProvider) {
+      dashboardProvider.updateErrors(numErrors);
     }
   }
 }
 
 export async function registerClearFileDiagnostics(context: vscode.ExtensionContext) {
-  const disposable = vscode.commands.registerCommand('ludwig.clearDiagnostics', () => {
+  let disposable = vscode.commands.registerCommand('ludwig.clearDiagnostics', () => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
       diagnosticCollection.delete(editor.document.uri);

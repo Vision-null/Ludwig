@@ -2,44 +2,46 @@ import * as vscode from 'vscode';
 import { initializeEslintDiagnostics } from './eslint/eslintDiagnostics';
 import { registerScanAllDocsCommand } from './commands/scanAllDocsCommand';
 import { registerScanDocCommand } from './commands/scanDocCommand';
-import { SidebarWebviewProvider } from './views/SidebarWebviewProvider';
+// import { SidebarWebviewProvider } from './views/SidebarWebviewProvider';
+import { DashboardWebviewProvider } from './views/DashboardWebviewProvider';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "ludwig" is now active!');
 
-  const primarySidebarWebview = new SidebarWebviewProvider(context.extensionUri);
+  // const primarySidebarWebview = new SidebarWebviewProvider(context.extensionUri);
+  const dashboardWebviewProvider = new DashboardWebviewProvider(context.extensionUri);
 
   context.subscriptions.push(
     vscode.commands.registerCommand('ludwig.showDashboard', () => {
-      const panel = vscode.window.createWebviewPanel(
-        SidebarWebviewProvider.viewType,
-        'Ludwig Dashboard',
-        vscode.ViewColumn.One,
-        {
-          enableScripts: true,
-          localResourceRoots: [context.extensionUri],
-        }
+        dashboardWebviewProvider.show(context);
+        })
       );
 
-      panel.webview.html = primarySidebarWebview.getWebviewContent(panel.webview);
+  // context.subscriptions.push(
+  //     vscode.window.registerWebviewViewProvider(
+  //       SidebarWebviewProvider.viewType,
+  //       primarySidebarWebview
+  //     )
+  // );
+  //     panel.webview.html = primarySidebarWebview.getWebviewContent(panel.webview);
 
-      // Handle messages from the webview
-      panel.webview.onDidReceiveMessage((message) => {
-        switch (message.command) {
-          case 'scanDoc':
-            vscode.commands.executeCommand('ludwig.scanDoc');
-            return;
-          case 'scanAllDocs':
-            vscode.commands.executeCommand('ludwig.scanAllDocs');
-            return;
-        }
-      });
-    })
-  );
+  //     // Handle messages from the webview
+  //     panel.webview.onDidReceiveMessage((message) => {
+  //       switch (message.command) {
+  //         case 'scanDoc':
+  //           vscode.commands.executeCommand('ludwig.scanDoc');
+  //           return;
+  //         case 'scanAllDocs':
+  //           vscode.commands.executeCommand('ludwig.scanAllDocs');
+  //           return;
+  //       }
+  //     });
+  //   })
+  // );
 
   registerScanDocCommand(context);
   registerScanAllDocsCommand(context);
-  initializeEslintDiagnostics(context, primarySidebarWebview);
+  initializeEslintDiagnostics(context, dashboardWebviewProvider);
 }
 
 export function deactivate() {

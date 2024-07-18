@@ -4,7 +4,7 @@ const path = require('path');
 const config = {
   target: 'node',
   mode: 'none',
-  entry: './src/extension.ts',  // This should point to your main TypeScript entry file
+  entry: './src/extension.ts',
   output: {
     path: path.resolve(__dirname, 'dist/eslint'),
     filename: 'extension.js',
@@ -60,10 +60,10 @@ const config = {
 const reactConfig = {
   target: 'web',
   mode: 'development',
-  entry: './src/react-views/dashboard/components/dashboard.js',  // Updated entry point
+  entry: './src/react-views/dashboard/components/dashboard.js',
   output: {
     path: path.resolve(__dirname, 'dist/dashboard'),
-    filename: 'dashboard.js',  // Updated output filename
+    filename: 'dashboard.js', 
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
