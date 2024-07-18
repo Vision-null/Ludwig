@@ -24,10 +24,11 @@ export async function highlightElements(document: vscode.TextDocument) {
 
     // populate recsByLineNumber
     for (const [ariaObjKey, recsArrays] of Object.entries(ariaRecommendations)) {
-      // skip totalElements key
-      if (ariaObjKey === 'totalElements') {
+      // skip totalElements and criticalIssuesByType keys
+      if (ariaObjKey === 'totalElements' || ariaObjKey === 'criticalIssuesByType') {
         continue;
       }
+
       for (const [lineNumber, outerHTML] of recsArrays as [number, string][]) {
         if (!recsByLineNumber[lineNumber]) {
           recsByLineNumber[lineNumber] = [ariaObjKey];
