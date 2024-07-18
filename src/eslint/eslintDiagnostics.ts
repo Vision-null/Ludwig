@@ -3,11 +3,12 @@ import * as path from 'path';
 import { ESLint } from 'eslint';
 import { runESLint } from './runESLint';
 let extensionContext: vscode.ExtensionContext;
-
 const diagnosticCollection = vscode.languages.createDiagnosticCollection('ludwig_eslint');
 
+let statusBarItem: vscode.StatusBarItem;
 let isActiveLintingEnabled = false;
 let isAllFilesLintingEnabled = false;
+let currentLintedFile: vscode.Uri | undefined;
 
 export function initializeLinting(context: vscode.ExtensionContext) {
   extensionContext = context;
@@ -17,10 +18,20 @@ export function initializeLinting(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('ludwig.clearDiagnostics', clearDiagnostics)
   );
 
+  statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+  statusBarItem.command = 'ludwig.toggleLintActiveFile';
+  context.subscriptions.push(statusBarItem);
+  updateStatusBarItem();
+
   vscode.window.onDidChangeActiveTextEditor(async (editor) => {
+    updateStatusBarItem();
     if (editor && isActiveLintingEnabled) {
       await lintDocument(editor.document);
     }
+  });
+
+  vscode.workspace.onDidChangeTextDocument(() => {
+    updateStatusBarItem();
   });
 
   vscode.workspace.onDidSaveTextDocument(async (document) => {
@@ -30,30 +41,60 @@ export function initializeLinting(context: vscode.ExtensionContext) {
   });
 }
 
+export async function lintDocument(document: vscode.TextDocument) {
+  if (!isAllFilesLintingEnabled) {
+    diagnosticCollection.clear();
+  }
+
+  currentLintedFile = document.uri;
+
+  const results = await runESLint(document, extensionContext);
+  if (results !== null) {
+    const diagnostics = createDiagnosticsFromResults(document, results);
+    diagnosticCollection.set(document.uri, diagnostics);
+    const fileName = path.basename(document.fileName);
+    const numErrors = diagnostics.length;
+    showTemporaryInfoMessage(`*${fileName}* processed successfully! ${numErrors} errors found.`);
+  } else {
+    diagnosticCollection.delete(document.uri);
+    const fileName = path.basename(document.fileName);
+    showTemporaryInfoMessage(`Linting failed for ${fileName}`);
+  }
+  updateStatusBarItem();
+}
+
 async function toggleLintActiveFile() {
   isActiveLintingEnabled = !isActiveLintingEnabled;
+  isAllFilesLintingEnabled = false;
   if (isActiveLintingEnabled) {
-    vscode.window.showInformationMessage('Linting enabled for active file');
+    showTemporaryInfoMessage('Linting enabled for active file');
     await lintActiveFile();
   } else {
-    vscode.window.showInformationMessage('Linting disabled for active file');
-    clearDiagnosticsForActiveFile();
+    diagnosticCollection.clear();
+    currentLintedFile = undefined;
+    showTemporaryInfoMessage('Linting disabled for active file');
   }
+  updateStatusBarItem();
 }
 
 async function toggleLintAllFiles() {
   isAllFilesLintingEnabled = !isAllFilesLintingEnabled;
+  isActiveLintingEnabled = false;
   if (isAllFilesLintingEnabled) {
-    vscode.window.showInformationMessage('Linting enabled for all files');
+    showTemporaryInfoMessage('Linting enabled for all files');
     await lintAllFiles();
   } else {
-    vscode.window.showInformationMessage('Linting disabled for all files');
+    showTemporaryInfoMessage('Linting disabled for all files');
     clearDiagnostics();
   }
+  updateStatusBarItem();
 }
+
 function clearDiagnostics() {
   diagnosticCollection.clear();
-  vscode.window.showInformationMessage('Diagnostics cleared for all files.');
+  currentLintedFile = undefined;
+  showTemporaryInfoMessage('Diagnostics cleared for active workspace.');
+  updateStatusBarItem();
 }
 
 async function lintActiveFile() {
@@ -70,32 +111,7 @@ async function lintAllFiles() {
   }
 }
 
-async function lintDocument(document: vscode.TextDocument) {
-  const results = await runESLint(document, extensionContext);
-  if (results !== null) {
-    const diagnostics = createDiagnosticsFromResults(document, results);
-    diagnosticCollection.set(document.uri, diagnostics);
-    const fileName = path.basename(document.fileName);
-    const numErrors = diagnostics.length;
-    vscode.window.showInformationMessage(`*${fileName}* processed successfully! ${numErrors} errors found.`);
-  } else {
-    diagnosticCollection.delete(document.uri);
-    vscode.window.showInformationMessage('No linting results found for this file.');
-  }
-}
-
-function clearDiagnosticsForActiveFile() {
-  const editor = vscode.window.activeTextEditor;
-  if (editor) {
-    diagnosticCollection.delete(editor.document.uri);
-    function clearDiagnostics() {
-      diagnosticCollection.clear();
-      vscode.window.showInformationMessage('Diagnostics cleared for all files.');
-    }
-  }
-}
-
-function createDiagnosticsFromResults(
+export function createDiagnosticsFromResults(
   document: vscode.TextDocument,
   results: ESLint.LintResult[]
 ): vscode.Diagnostic[] {
@@ -112,4 +128,31 @@ function createDiagnosticsFromResults(
       );
     })
   );
+}
+
+function updateStatusBarItem() {
+  console.log(`Updating status bar. Active: ${isActiveLintingEnabled}, All: ${isAllFilesLintingEnabled}`);
+  if (isActiveLintingEnabled) {
+    statusBarItem.text = '$(check) Ludwig: Active File';
+    statusBarItem.show();
+  } else if (isAllFilesLintingEnabled) {
+    statusBarItem.text = '$(check) Ludwig: All Files';
+    statusBarItem.show();
+  } else {
+    statusBarItem.text = '$(x) Ludwig: Disabled';
+    statusBarItem.show();
+  }
+}
+
+function showTemporaryInfoMessage(
+  message: string,
+  timeout: number = 3000,
+  messageType: 'info' | 'statusBar' = 'statusBar'
+) {
+  if (messageType === 'info') {
+    vscode.window.showInformationMessage(message);
+  } else {
+    const statusBarMessage = vscode.window.setStatusBarMessage(message, timeout);
+    setTimeout(() => statusBarMessage.dispose(), timeout);
+  }
 }

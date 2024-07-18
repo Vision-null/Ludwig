@@ -3,7 +3,6 @@ import { initializeLinting } from './eslint/eslintDiagnostics';
 import { registerScanAllDocsCommand } from './commands/scanAllDocsCommand';
 import { registerScanDocCommand } from './commands/scanDocCommand';
 import { registerHighlightElementsCommand, registerToggleOffCommand } from './commands/highlightElementsCommand';
-import { registerDocumentEvents } from './commands/documentEvents';
 import { registerHoverProvider } from './commands/hoverProvider';
 import { SidebarWebviewProvider } from './views/SidebarWebviewProvider';
 
@@ -15,26 +14,19 @@ export function activate(context: vscode.ExtensionContext) {
     SidebarWebviewProvider.viewType,
     primarySidebarWebview
   );
+
   registerScanDocCommand(context);
   registerScanAllDocsCommand(context);
   initializeLinting(context);
-  //   registerHighlightElementsCommand(context);
-  //   registerToggleOffCommand(context);
-  //   registerDocumentEvents(context);
-  //   registerHoverProvider(context);
+  registerHighlightElementsCommand(context);
+  registerToggleOffCommand(context);
+  registerHoverProvider(context);
 
   context.subscriptions.push(sidebarWebviewDisposable);
 }
 
 export function deactivate() {
-  vscode.window.showInformationMessage('Goodbye');
 }
-
-//
-//
-//
-//
-//
 //
 //
 //
@@ -215,7 +207,7 @@ export function deactivate() {
                         }
                     }
                 }
-            }
-            return null;
-        }
-    }); */
+    //         }
+    //         return null;
+    //     }
+    // }); */
