@@ -29,7 +29,6 @@ export async function compileLogic(activeEditor: vscode.TextEditor) {
   }
 
   ariaRecommendations.anchorLabel = Critical.anchorLabelCheck(tag('a'));
-  // I changed functionality for this one and the next, but not the rest
 
   ariaRecommendations.areaAltText = Critical.areaAltTextCheck(tag('area'));
 
