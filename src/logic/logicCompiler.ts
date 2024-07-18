@@ -66,9 +66,19 @@ export async function compileLogic(activeEditor: vscode.TextEditor) {
     }
   }
 
+  // create property criticalIssuesByType
+  ariaRecommendations.criticalIssuesByType = {};
+  for (const key in ariaRecommendations) {
+    if (key !== 'totalElements' && key !== 'criticalIssuesByType') {
+      ariaRecommendations.criticalIssuesByType[key] = ariaRecommendations[key].length;
+    }
+  }
+  
+
   ariaRecommendations.totalElements = body.querySelectorAll('*').length;
   // the reason for saving the total number of elements in the document now is because this is the only place in the code where we create the JSDOM
   // totalElements will be used in the react dashboard to calculate the percentage of elements that are accessible
+
 
   return ariaRecommendations;
 }
