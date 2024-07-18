@@ -31,23 +31,25 @@ export async function eslintScanFiles(
   context: vscode.ExtensionContext,
   configFilePath?: string
 ): Promise<LintResult | null> {
+  //initialize ESLint with custom configuration
   const eslint = new ESLint({
     useEslintrc: false,
     overrideConfigFile: configFilePath || path.join(context.extensionPath, 'src/eslint/.eslintrc.accessibility.json'),
     resolvePluginsRelativeTo: context.extensionPath,
   });
 
-  const lintResults: ESLint.LintResult[] = [];
-  const lintSummary = { errors: 0, warnings: 0 };
+  const lintResults: ESLint.LintResult[] = []; //store results from ESLINT
+  const lintSummary = { errors: 0, warnings: 0 }; //Summary of eslint results
 
   try {
     if (Array.isArray(files)) {
+      //handle array of file URIs
       for (const file of files) {
         const document = await vscode.workspace.openTextDocument(file);
         if (document) {
           const fileResults = await eslint.lintText(document.getText(), { filePath: document.fileName });
           if (fileResults) {
-            lintResults.push(...fileResults);
+            lintResults.push(...fileResults); //add results into LintResults Array
           }
         }
       }
@@ -61,11 +63,13 @@ export async function eslintScanFiles(
     const details: LintIssue[] = [];
     let filepath = '';
 
+    //loop through results
     for (const result of lintResults) {
       filepath += (filepath ? ', ' : '') + result.filePath;
       lintSummary.errors += result.errorCount || 0;
       lintSummary.warnings += result.warningCount || 0;
 
+      //extract details from each error/warning
       if (result.messages) {
         for (const message of result.messages) {
           details.push({
@@ -95,18 +99,36 @@ export async function eslintScanFiles(
         details,
       };
 
-      const jsonResult = JSON.stringify(lintResult, null, 2);
+      const jsonResult = JSON.stringify(lintResult, null, 2); //convert to JSON
 
-      // save to file
-      const outputPath = path.join(
-        context.extensionPath,
-        'ludwigReports',
-        `${lintResult.summary.timeCreated} ludwig-report.json`
-      );
-      fs.writeFileSync(outputPath, jsonResult);
-      vscode.window.showInformationMessage(`ESLint results saved to: ${outputPath}`);
+      // save to Central JSON LIBRARY
 
-      //show in output channel
+      const resultsLibPath = path.join(context.extensionPath, 'resultsLib');
+      let resultsLib=[];
+
+      if (fs.existsSync(resultsLibPath)) {
+        //read exsisting data if it exists
+        const exsistingData = fs.readFileSync(resultsLibPath, 'utf-8');
+        resultsLib = JSON.parse(exsistingData);
+      }
+
+      //add new results
+      resultsLib.push(lintResult);
+      //save updated data
+      fs.writeFileSync(resultsLibPath, JSON.stringify(resultsLib, null, 2));
+      //show in VSCODE Notif message
+      vscode.window.showInformationMessage(`ESLint results saved to: ${resultsLibPath}`);
+
+
+      // const outputPath = path.join(
+      //   context.extensionPath,
+      //   'ludwigReports',
+      //   `${lintResult.summary.timeCreated} ludwig-report.json`
+      // );
+      // fs.writeFileSync(outputPath, jsonResult);
+      // vscode.window.showInformationMessage(`ESLint results saved to: ${outputPath}`);
+
+      //show results in output channel
       const outputChannel = vscode.window.createOutputChannel('ESLint Results');
       outputChannel.show();
       outputChannel.appendLine(jsonResult);
