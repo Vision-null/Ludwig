@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { ESLint } from 'eslint';
+import { ruleSeverityMapping } from './ruleSeverityMapping';
 
 interface LintIssue {
   ruleId: string;
@@ -12,6 +13,7 @@ interface LintIssue {
   endLine?: number;
   endColumn?: number;
   nodeType?: string;
+  customSeverity?: number;
 }
 
 interface LintResult {
@@ -23,6 +25,7 @@ interface LintResult {
     errors: number;
     warnings: number;
   };
+  
   details: LintIssue[];
 }
 
@@ -31,25 +34,25 @@ export async function eslintScanFiles(
   context: vscode.ExtensionContext,
   configFilePath?: string
 ): Promise<LintResult | null> {
-  //initialize ESLint with custom configuration
+  // Initialize ESLint with custom configuration
   const eslint = new ESLint({
     useEslintrc: false,
     overrideConfigFile: configFilePath || path.join(context.extensionPath, 'src/eslint/.eslintrc.accessibility.json'),
     resolvePluginsRelativeTo: context.extensionPath,
   });
 
-  const lintResults: ESLint.LintResult[] = []; //store results from ESLINT
-  const lintSummary = { errors: 0, warnings: 0 }; //Summary of eslint results
+  const lintResults: ESLint.LintResult[] = []; // Store results from ESLint
+  const lintSummary = { errors: 0, warnings: 0 }; // Summary of ESLint results
 
   try {
     if (Array.isArray(files)) {
-      //handle array of file URIs
+      // Handle array of file URIs
       for (const file of files) {
         const document = await vscode.workspace.openTextDocument(file);
         if (document) {
           const fileResults = await eslint.lintText(document.getText(), { filePath: document.fileName });
           if (fileResults) {
-            lintResults.push(...fileResults); //add results into LintResults Array
+            lintResults.push(...fileResults); // Add results into lintResults array
           }
         }
       }
@@ -58,20 +61,27 @@ export async function eslintScanFiles(
       if (results) {
         lintResults.push(...results);
       }
+      if (results) {
+        lintResults.push(...results);
+      }
     }
 
     const details: LintIssue[] = [];
     let filepath = '';
 
-    //loop through results
+    // Loop through results
     for (const result of lintResults) {
       filepath += (filepath ? ', ' : '') + result.filePath;
       lintSummary.errors += result.errorCount || 0;
       lintSummary.warnings += result.warningCount || 0;
+      filepath += (filepath ? ', ' : '') + result.filePath;
+      lintSummary.errors += result.errorCount || 0;
+      lintSummary.warnings += result.warningCount || 0;
 
-      //extract details from each error/warning
+      // Extract details from each error/warning
       if (result.messages) {
         for (const message of result.messages) {
+          const customSeverity = ruleSeverityMapping[message.ruleId || 'unknown'] || 0;
           details.push({
             ruleId: message.ruleId || 'unknown',
             severity: message.severity || 0,
@@ -81,8 +91,12 @@ export async function eslintScanFiles(
             endLine: message.endLine,
             endColumn: message.endColumn,
             nodeType: message.nodeType,
+            customSeverity: customSeverity,
           });
+          
+        // console.log('custom severity ',customSeverity);
         }
+        
       }
     }
 
@@ -99,44 +113,42 @@ export async function eslintScanFiles(
         details,
       };
 
-      const jsonResult = JSON.stringify(lintResult, null, 2); //convert to JSON
+      const jsonResult = JSON.stringify(lintResult, null, 2); // Convert to JSON
 
-      // save to Central JSON LIBRARY
-
-      const resultsLibPath = path.join(context.extensionPath, 'resultsLib');
-      let resultsLib=[];
+      // Save to central JSON library
+      const resultsLibPath = path.join(context.extensionPath, 'resultsLib.json');
+      let resultsLib = [];
 
       if (fs.existsSync(resultsLibPath)) {
-        //read exsisting data if it exists
-        const exsistingData = fs.readFileSync(resultsLibPath, 'utf-8');
-        resultsLib = JSON.parse(exsistingData);
+        // Read existing data if it exists
+        const existingData = fs.readFileSync(resultsLibPath, 'utf-8');
+        resultsLib = JSON.parse(existingData);
       }
 
-      //add new results
+      // Add new results
       resultsLib.push(lintResult);
-      //save updated data
+
+      // Save updated data
       fs.writeFileSync(resultsLibPath, JSON.stringify(resultsLib, null, 2));
-      //show in VSCODE Notif message
+
+      // Show in VSCode notification message
       vscode.window.showInformationMessage(`ESLint results saved to: ${resultsLibPath}`);
 
-
-      // const outputPath = path.join(
-      //   context.extensionPath,
-      //   'ludwigReports',
-      //   `${lintResult.summary.timeCreated} ludwig-report.json`
-      // );
-      // fs.writeFileSync(outputPath, jsonResult);
-      // vscode.window.showInformationMessage(`ESLint results saved to: ${outputPath}`);
-
-      //show results in output channel
+      // Show results in output channel
       const outputChannel = vscode.window.createOutputChannel('ESLint Results');
       outputChannel.show();
       outputChannel.appendLine(jsonResult);
 
       return lintResult;
     }
+
     return null;
   } catch (error: any) {
+    if (error.message) {
+      throw new Error(`Linting failed: ${error.message}`);
+    } else {
+      throw new Error('Linting failed');
+    }
     if (error.message) {
       throw new Error(`Linting failed: ${error.message}`);
     } else {
