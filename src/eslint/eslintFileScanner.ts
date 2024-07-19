@@ -148,10 +148,5 @@ export async function eslintScanFiles(
     } else {
       throw new Error('Linting failed');
     }
-    if (error.message) {
-      throw new Error(`Linting failed: ${error.message}`);
-    } else {
-      throw new Error('Linting failed');
-    }
   }
 }
