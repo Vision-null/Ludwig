@@ -17,7 +17,7 @@ export function cloneDomFromSource(source: any) {
     pretendToBeVisual: true,
     includeNodeLocations: true,
   });
-  document = window.document;
+  _document = window.document;
   body = window.document.body;
 }
 
