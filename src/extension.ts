@@ -12,9 +12,6 @@ import { SidebarWebviewProvider } from './views/SidebarWebviewProvider';
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "ludwig" is now active!');
 
-  let testVar = 'test';
-  let testVar1;
-  const testVar2 = 0;
   const primarySidebarWebview = new SidebarWebviewProvider(context.extensionUri);
   const sidebarWebviewDisposable = vscode.window.registerWebviewViewProvider(
     SidebarWebviewProvider.viewType,
