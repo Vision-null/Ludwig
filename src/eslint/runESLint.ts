@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { ESLint } from 'eslint';
 
-let extensionContext: vscode.ExtensionContext;
+// let extensionContext: vscode.ExtensionContext;
 type SupportedLanguage = 'html' | 'javascriptreact' | 'typescriptreact';
 
 export async function runESLint(

@@ -25,8 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(sidebarWebviewDisposable);
 }
 
-export function deactivate() {
-}
+export function deactivate() {}
 //
 //
 //

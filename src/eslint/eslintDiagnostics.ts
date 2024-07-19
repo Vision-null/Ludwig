@@ -8,7 +8,7 @@ const diagnosticCollection = vscode.languages.createDiagnosticCollection('ludwig
 let statusBarItem: vscode.StatusBarItem;
 let isActiveLintingEnabled = false;
 let isAllFilesLintingEnabled = false;
-let currentLintedFile: vscode.Uri | undefined;
+// let currentLintedFile: vscode.Uri | undefined;
 
 export function initializeLinting(context: vscode.ExtensionContext) {
   extensionContext = context;
@@ -46,7 +46,7 @@ export async function lintDocument(document: vscode.TextDocument) {
     diagnosticCollection.clear();
   }
 
-  currentLintedFile = document.uri;
+  // currentLintedFile = document.uri;
 
   const results = await runESLint(document, extensionContext);
   if (results !== null) {
@@ -71,7 +71,7 @@ async function toggleLintActiveFile() {
     await lintActiveFile();
   } else {
     diagnosticCollection.clear();
-    currentLintedFile = undefined;
+    // currentLintedFile = undefined;
     showTemporaryInfoMessage('Linting disabled for active file');
   }
   updateStatusBarItem();
@@ -92,7 +92,7 @@ async function toggleLintAllFiles() {
 
 function clearDiagnostics() {
   diagnosticCollection.clear();
-  currentLintedFile = undefined;
+  // currentLintedFile = undefined;
   showTemporaryInfoMessage('Diagnostics cleared for active workspace.');
   updateStatusBarItem();
 }

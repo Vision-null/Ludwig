@@ -8,9 +8,9 @@ export class SidebarWebviewProvider implements vscode.WebviewViewProvider {
   constructor(private readonly _extensionUri: vscode.Uri) {}
 
   public resolveWebviewView(
-    webviewView: vscode.WebviewView,
-    context: vscode.WebviewViewResolveContext,
-    _token: vscode.CancellationToken
+    webviewView: vscode.WebviewView
+    // context: vscode.WebviewViewResolveContext,
+    // _token: vscode.CancellationToken
   ): void {
     this._view = webviewView;
 
@@ -34,9 +34,7 @@ export class SidebarWebviewProvider implements vscode.WebviewViewProvider {
   }
 
   private getWebviewContent(webview: vscode.Webview): string {
-    const styleUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, 'assets', 'style.css')
-    );
+    const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'assets', 'style.css'));
 
     return `
       <!DOCTYPE html>

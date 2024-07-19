@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const { ariaObject } = require('../aria-standards/critical/aria-object');
 
 function inputButtonText(input: any, ariaRecommendations: any) {
@@ -43,10 +45,7 @@ function buttonText(input: any, ariaRecommendations: any) {
     if (el.innerHTML === '') {
       const line = Math.floor(Math.random() * 5000) + 1;
       buttonText.push([el.outerHTML, line]);
-      ariaRecommendations[line] = [
-        ariaObject.discernibleButtonText,
-        el.outerHTML,
-      ];
+      ariaRecommendations[line] = [ariaObject.discernibleButtonText, el.outerHTML];
     }
   });
   return buttonText;
