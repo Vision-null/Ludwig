@@ -26,26 +26,6 @@ interface LintResult {
   details: LintIssue[];
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export async function eslintScanFiles(
   files: vscode.Uri[] | vscode.TextDocument,
   context: vscode.ExtensionContext,
@@ -56,21 +36,6 @@ export async function eslintScanFiles(
     overrideConfigFile: configFilePath || path.join(context.extensionPath, 'src/eslint/.eslintrc.accessibility.json'),
     resolvePluginsRelativeTo: context.extensionPath,
   });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const lintResults: ESLint.LintResult[] = [];
   const lintSummary = { errors: 0, warnings: 0 };

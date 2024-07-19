@@ -7,7 +7,7 @@ const diagnosticCollection: vscode.DiagnosticCollection = vscode.languages.creat
 
 export function initializeEslintDiagnostics(context: vscode.ExtensionContext) {
   extensionContext = context;
-  registerGetResultsCommand(context)
+  registerGetResultsCommand(context);
   registerClearFileDiagnostics(context);
 }
 
@@ -25,7 +25,7 @@ export async function runESLint(document: vscode.TextDocument): Promise<ESLint.L
     resolvePluginsRelativeTo: extensionContext.extensionPath,
   });
 
-  const text = document.getText()
+  const text = document.getText();
   const results = await eslint.lintText(text, {
     filePath: document.fileName,
   });
@@ -55,7 +55,7 @@ export async function registerClearFileDiagnostics(context: vscode.ExtensionCont
       diagnosticCollection.delete(editor.document.uri);
       vscode.window.showInformationMessage('Diagnostics cleared for the current file.');
     }
-  })
+  });
 
   context.subscriptions.push(disposable);
 }
