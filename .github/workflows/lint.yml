@@ -53,7 +53,7 @@ jobs:
 
       - name: Run Prettier with auto-fix
         if: steps.format_check.outcome == 'failure'
-        run: pnpm prettier --write "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}"
+        run: pnpm prettier --write "src/**/*.{js,jsx,ts,json,css,scss,md}"
 
       - name: Git Auto Commit
         if: steps.lint_check.outcome == 'failure' || steps.format_check.outcome == 'failure'
