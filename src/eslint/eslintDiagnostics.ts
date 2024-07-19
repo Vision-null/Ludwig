@@ -78,7 +78,7 @@ export async function setESLintDiagnostics() {
 }
 
 export async function registerClearFileDiagnostics(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand('ludwig.clearDiagnostics', () => {
+  const disposable = vscode.commands.registerCommand('ludwig.clearDiagnostics', () => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
       diagnosticCollection.delete(editor.document.uri);
@@ -97,7 +97,7 @@ function createDiagnosticsFromLintResult(
   lintResult.details.forEach((issue) => {
     const range = new vscode.Range(
       new vscode.Position(issue.line - 1, issue.column - 1),
-      new vscode.Position(issue.endLine ? issue.endLine - 1 : issue.line - 1, issue.endColumn ? issue.endColumn : issue.column)
+      new vscode.Position(issue.endLine ? issue.endLine - 1 : issue.line - 1, Number.MAX_SAFE_INTEGER)
     );
 
     const diagnostic = new vscode.Diagnostic(
