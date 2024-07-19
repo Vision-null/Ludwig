@@ -11,6 +11,28 @@ export function initializeEslintDiagnostics(context: vscode.ExtensionContext) {
   registerClearFileDiagnostics(context);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export async function runESLint(document: vscode.TextDocument): Promise<ESLint.LintResult[]> {
   const workspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
   const userConfig = {};

@@ -59,7 +59,9 @@ jobs:
           branch: ${{ github.head_ref }}
 
       - name: Final ESLint Check
+        if: steps.lint_check.outcome == 'failure' || steps.format_check.outcome == 'failure'
         run: pnpm run lint
 
       - name: Final Prettier Check
+        if: steps.lint_check.outcome == 'failure' || steps.format_check.outcome == 'failure'
         run: pnpm prettier --check "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}"

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { provideHover } from '../utils/highlightElements';
+import { provideHover } from '../utils/highlightElements'
 
 export function registerHoverProvider(context: vscode.ExtensionContext) {
   const hoverProviderDisposable = vscode.languages.registerHoverProvider(
@@ -11,5 +11,5 @@ export function registerHoverProvider(context: vscode.ExtensionContext) {
     }
   );
 
-  context.subscriptions.push(hoverProviderDisposable);
+  context.subscriptions.push(hoverProviderDisposable)
 }
