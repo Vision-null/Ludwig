@@ -12,6 +12,9 @@ on:
       - test/*
       - actions/*
 
+permissions:
+  contents: write
+
 jobs:
   lint-and-format:
     runs-on: ubuntu-latest
