@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { registerScanFilesCommand } from './commands/scanFiles';
 import { registerScanFilesWithCustomConfigCommand } from './commands/scanFiles';
-import { initializeEslintDiagnostics } from './eslint/eslintDiagnostics'
+import { initializeEslintDiagnostics } from './eslint/eslintDiagnostics';
 import { registerScanAllDocsCommand } from './commands/scanAllDocsCommand';
 import { registerScanDocCommand } from './commands/scanDocCommand';
 // import { registerHighlightElementsCommand, registerToggleOffCommand } from './commands/highlightElementsCommand';
@@ -10,30 +10,12 @@ import { registerScanDocCommand } from './commands/scanDocCommand';
 import { SidebarWebviewProvider } from './views/SidebarWebviewProvider';
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Congratulations, your extension "ludwig" is now active!')
+  console.log('Congratulations, your extension "ludwig" is now active!');
 
   const primarySidebarWebview = new SidebarWebviewProvider(context.extensionUri);
   const sidebarWebviewDisposable = vscode.window.registerWebviewViewProvider(
     SidebarWebviewProvider.viewType,
     primarySidebarWebview
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   );
   registerScanFilesCommand(context);
   registerScanFilesWithCustomConfigCommand(context);

@@ -10,37 +10,6 @@ export function registerDocumentEvents(context: vscode.ExtensionContext) {
 
   const activeEditorChangeDisposable = vscode.window.onDidChangeActiveTextEditor((editor) => {
     if (editor && editor.document.languageId === 'html') {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
       highlightElements(editor.document);
     }
   });

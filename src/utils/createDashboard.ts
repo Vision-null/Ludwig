@@ -13,23 +13,6 @@ export function createDashboard(context: vscode.ExtensionContext) {
     enableScripts: true,
     retainContextWhenHidden: true,
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'dist'))],
   });
 
@@ -45,22 +28,6 @@ export function createDashboard(context: vscode.ExtensionContext) {
   dashboard.onDidDispose(
     () => {
       dashboard = undefined;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
     },
     null,
     context.subscriptions
