@@ -16,17 +16,6 @@ export function registerScanFilesWithCustomConfigCommand(context: vscode.Extensi
   console.log('ludwig.scanFilesWithCustomConfig command registered');
 }
 
-
-
-
-
-
-
-
-
-
-
-
 function handleScanFiles(context: vscode.ExtensionContext) {
   return async (uriOrUris: vscode.Uri | vscode.Uri[] | undefined) => {
     await scanFiles(context, uriOrUris);
