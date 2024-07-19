@@ -12,6 +12,24 @@ export function createDashboard(context: vscode.ExtensionContext) {
   dashboard = vscode.window.createWebviewPanel('ludwig-dashboard', 'Ludwig Dashboard', vscode.ViewColumn.Beside, {
     enableScripts: true,
     retainContextWhenHidden: true,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'dist'))],
   });
 
@@ -27,6 +45,22 @@ export function createDashboard(context: vscode.ExtensionContext) {
   dashboard.onDidDispose(
     () => {
       dashboard = undefined;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
     },
     null,
     context.subscriptions
