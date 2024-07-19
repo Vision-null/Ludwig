@@ -35,7 +35,7 @@ jobs:
 
       - name: Initial ESLint Check
         id: lint_check
-        run: pnpm eslint src/**/*.{js,jsx,ts,tsx}
+        run: pnpm run lint
         continue-on-error: true
 
       - name: Initial Prettier Check
@@ -59,7 +59,7 @@ jobs:
           branch: ${{ github.head_ref }}
 
       - name: Final ESLint Check
-        run: pnpm eslint src/**/*.{js,jsx,ts,tsx}
+        run: pnpm run lint
 
       - name: Final Prettier Check
         run: pnpm prettier --check "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}"
