@@ -25,7 +25,7 @@ interface LintResult {
     errors: number;
     warnings: number;
   };
-  
+
   details: LintIssue[];
 }
 
@@ -93,10 +93,9 @@ export async function eslintScanFiles(
             nodeType: message.nodeType,
             customSeverity: customSeverity,
           });
-          
-        // console.log('custom severity ',customSeverity);
+
+          // console.log('custom severity ',customSeverity);
         }
-        
       }
     }
 

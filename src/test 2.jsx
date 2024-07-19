@@ -20,7 +20,9 @@ function TestComponent({ title, onClick }) {
       <h2>Test</h2>
       <h1>Subheading</h1>
       {/* Non-interactive element assigned an interactive role */}
-      <span role="button" onClick={onClick}>Interactive span</span>
+      <span role="button" onClick={onClick}>
+        Interactive span
+      </span>
       {/* ARIA activedescendant without tabindex */}
       <div aria-activedescendant="some-id" />
       {/* Incorrect ARIA prop */}

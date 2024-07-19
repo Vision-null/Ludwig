@@ -92,7 +92,7 @@ const htmlCode = `
 </html>
 `;
 
-const jsdomInstance= new JSDOM(htmlCode);
+const jsdomInstance = new JSDOM(htmlCode);
 const domDocument = jsdomInstance.window.document;
 const ludwig = domDocument.body;
 

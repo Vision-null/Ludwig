@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { ESLint } from 'eslint';
-import { ruleSeverityMapping } from './ruleSeverityMapping';
+//import { ESLint } from 'eslint';
+//import { ruleSeverityMapping } from './ruleSeverityMapping';
 import { eslintScanFiles } from './eslintFileScanner';
 
 let extensionContext: vscode.ExtensionContext;
 const diagnosticCollection: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('jsx_eslint');
-
 
 interface LintIssue {
   ruleId: string;
@@ -30,7 +29,6 @@ interface LintResult {
   };
   details: LintIssue[];
 }
-
 
 export function initializeEslintDiagnostics(context: vscode.ExtensionContext) {
   extensionContext = context;
@@ -67,14 +65,14 @@ export async function setESLintDiagnostics() {
     const document = editor.document;
     const results = await eslintScanFiles([document.uri], extensionContext);
     if (results) {
-    const diagnostics = createDiagnosticsFromLintResult(document, results);
-    diagnosticCollection.set(document.uri, diagnostics);
-    const fileName = path.basename(document.fileName);
-    const numErrors = diagnostics.length;
-    const message = `*${fileName}* processed successfully! ${numErrors} errors found.`;
-    vscode.window.showInformationMessage(message);
+      const diagnostics = createDiagnosticsFromLintResult(document, results);
+      diagnosticCollection.set(document.uri, diagnostics);
+      const fileName = path.basename(document.fileName);
+      const numErrors = diagnostics.length;
+      const message = `*${fileName}* processed successfully! ${numErrors} errors found.`;
+      vscode.window.showInformationMessage(message);
+    }
   }
-}
 }
 
 export async function registerClearFileDiagnostics(context: vscode.ExtensionContext) {
@@ -89,10 +87,7 @@ export async function registerClearFileDiagnostics(context: vscode.ExtensionCont
   context.subscriptions.push(disposable);
 }
 
-function createDiagnosticsFromLintResult(
-  document: vscode.TextDocument,
-  lintResult: LintResult
-): vscode.Diagnostic[] {
+function createDiagnosticsFromLintResult(document: vscode.TextDocument, lintResult: LintResult): vscode.Diagnostic[] {
   const diagnostics: vscode.Diagnostic[] = [];
   lintResult.details.forEach((issue) => {
     const range = new vscode.Range(
@@ -112,8 +107,6 @@ function createDiagnosticsFromLintResult(
   return diagnostics;
 }
 
-
-
 // function createDiagnosticsFromResults(
 //   document: vscode.TextDocument,
 //   results: ESLint.LintResult[]
@@ -125,10 +118,10 @@ function createDiagnosticsFromLintResult(
 //         new vscode.Position(message.line - 1, message.column - 1),
 //         new vscode.Position(message.line - 1, message.column)
 //       );
-      
+
 //       const ruleId = message.ruleId || 'unknown-rule';
 //       const customSeverity = ruleSeverityMapping[ruleId] || 1;
-      
+
 //       const diagnostic = new vscode.Diagnostic(
 //         range,
 //        `${message.message} (severity: ${customSeverity})`,

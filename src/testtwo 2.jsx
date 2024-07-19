@@ -16,7 +16,7 @@ function TestComponent({ title, onClick }) {
       <form>
         <input type="text" id="name" />
       </form>
-      </div>
+    </div>
   );
 }
 
