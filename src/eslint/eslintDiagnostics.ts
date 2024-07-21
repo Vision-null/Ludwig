@@ -13,6 +13,7 @@ const diagnosticCollection = vscode.languages.createDiagnosticCollection('ludwig
 let statusBarItem: vscode.StatusBarItem;
 let isActiveLintingEnabled = false;
 let isAllFilesLintingEnabled = false;
+// let isLintOnSaveEnabled = false;
 let _currentLintedFile: vscode.Uri | undefined;
 
 interface LintIssue {
@@ -45,6 +46,7 @@ export function initializeLinting(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('ludwig.toggleLintActiveFile', toggleLintActiveFile),
     vscode.commands.registerCommand('ludwig.toggleLintAllFiles', toggleLintAllFiles),
     vscode.commands.registerCommand('ludwig.clearDiagnostics', clearDiagnostics),
+    vscode.commands.registerCommand('ludwig.toggleLintOnSave', toggleLintOnSave),
     vscode.commands.registerCommand('ludwig.saveLintResults', saveLintResults)
     // vscode.commands.registerCommand('ludwig.resetLib', resetLib)
   );
@@ -61,18 +63,29 @@ export function initializeLinting(context: vscode.ExtensionContext) {
     }
   });
 
-  vscode.workspace.onDidChangeTextDocument(() => {
-    updateStatusBarItem();
-  });
-
-  vscode.workspace.onDidSaveTextDocument(async (document) => {
-    if (isAllFilesLintingEnabled) {
-      await lintDocument(document);
-    }
-  });
+  // vscode.workspace.onDidChangeTextDocument(() => {
+  //   updateStatusBarItem();
+  // });
+  // on-document-save listener
+  context.subscriptions.push(
+    vscode.workspace.onDidSaveTextDocument(async (document) => {
+      if (getLintOnSaveConfig()) {
+        await lintDocument(document, true);
+      }
+    })
+  );
+  // configuration change (package.json) listener
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((event) => {
+      if (event.affectsConfiguration('ludwig.lintOnSave')) {
+        updateStatusBarItem();
+      }
+    })
+  );
 }
 
 export async function lintDocument(document: vscode.TextDocument, saveResults: boolean = false) {
+  const activeEditor = vscode.window.activeTextEditor;
   if (!isAllFilesLintingEnabled) {
     diagnosticCollection.clear();
   }
@@ -99,6 +112,9 @@ export async function lintDocument(document: vscode.TextDocument, saveResults: b
       const numIssues = lintResult.details.length;
       showTemporaryInfoMessage(`*${fileName}* processed successfully! ${numIssues} issues found.`);
       updateStatusBarItem();
+      if (activeEditor) {
+        await vscode.window.showTextDocument(document, activeEditor.viewColumn);
+      }
       return lintResult;
     }
   } catch (error) {
@@ -319,7 +335,9 @@ async function updateDashboard(lintResult: LintResult) {
     fileName: path.basename(currentFile),
     data: chartData,
   });
-
+  if (editor) {
+    await vscode.window.showTextDocument(editor.document, editor.viewColumn);
+  }
   console.log('Dashboard updated with latest data');
 }
 
@@ -327,16 +345,21 @@ async function toggleLintActiveFile() {
   isActiveLintingEnabled = !isActiveLintingEnabled;
   isAllFilesLintingEnabled = false;
   if (isActiveLintingEnabled) {
-    showTemporaryInfoMessage('Linting enabled for active file');
+    if (!getLintOnSaveConfig()) {
+      await setLintOnSaveConfig(true);
+      showTemporaryInfoMessage('Linting enabled for active file and on save');
+    } else {
+      showTemporaryInfoMessage('Linting enabled for active file');
+    }
     await lintActiveFile();
   } else {
+    await setLintOnSaveConfig(false);
     diagnosticCollection.clear();
     _currentLintedFile = undefined;
-    showTemporaryInfoMessage('Linting disabled for active file');
+    showTemporaryInfoMessage('Linting disabled');
   }
   updateStatusBarItem();
 }
-
 async function toggleLintAllFiles() {
   isAllFilesLintingEnabled = !isAllFilesLintingEnabled;
   isActiveLintingEnabled = false;
@@ -347,6 +370,13 @@ async function toggleLintAllFiles() {
     showTemporaryInfoMessage('Linting disabled for all files');
     clearDiagnostics();
   }
+  updateStatusBarItem();
+}
+
+async function toggleLintOnSave() {
+  const currentValue = getLintOnSaveConfig();
+  await setLintOnSaveConfig(!currentValue);
+  showTemporaryInfoMessage(`Lint on save: ${!currentValue ? 'enabled' : 'disabled'}`);
   updateStatusBarItem();
 }
 
@@ -371,18 +401,28 @@ async function lintAllFiles() {
   }
 }
 
+function getLintOnSaveConfig(): boolean {
+  return vscode.workspace.getConfiguration('ludwig').get('lintOnSave', false);
+}
+
+function setLintOnSaveConfig(value: boolean) {
+  return vscode.workspace.getConfiguration('ludwig').update('lintOnSave', value, vscode.ConfigurationTarget.Global);
+}
+
 function updateStatusBarItem() {
-  console.log(`Updating status bar. Active: ${isActiveLintingEnabled}, All: ${isAllFilesLintingEnabled}`);
-  if (isActiveLintingEnabled) {
+  const isLintOnSaveEnabled = getLintOnSaveConfig();
+  if (isActiveLintingEnabled && isLintOnSaveEnabled) {
+    statusBarItem.text = '$(check) Ludwig: Active + On Save';
+  } else if (isActiveLintingEnabled) {
     statusBarItem.text = '$(check) Ludwig: Active File';
-    statusBarItem.show();
   } else if (isAllFilesLintingEnabled) {
     statusBarItem.text = '$(check) Ludwig: All Files';
-    statusBarItem.show();
+  } else if (isLintOnSaveEnabled) {
+    statusBarItem.text = '$(check) Ludwig: On Save';
   } else {
     statusBarItem.text = '$(x) Ludwig: Disabled';
-    statusBarItem.show();
   }
+  statusBarItem.show();
 }
 
 function showTemporaryInfoMessage(

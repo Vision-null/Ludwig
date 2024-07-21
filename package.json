@@ -19,6 +19,16 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Ludwig",
+      "properties": {
+        "ludwig.lintOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable automatic linting on file save."
+        }
+      }
+    },
     "commands": [
       {
         "command": "ludwig.showDashboard",
@@ -39,13 +49,19 @@
       },
       {
         "command": "ludwig.toggleLintActiveFile",
-        "title": "Toggle Lint Active File", 
+        "title": "Toggle Lint Active File",
         "category": "Ludwig",
         "when": "editorLangId =~ /html|javascriptreact|typescriptreact/"
       },
       {
         "command": "ludwig.toggleLintAllFiles",
         "title": "Toggle Lint All Files",
+        "category": "Ludwig",
+        "when": "workspaceFolderCount > 0"
+      },
+      {
+        "command": "ludwig.toggleLintOnSave",
+        "title": "Toggle Lint on Save",
         "category": "Ludwig",
         "when": "workspaceFolderCount > 0"
       },
